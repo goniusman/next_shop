@@ -29,6 +29,8 @@ import { clearCheckoutAtom } from '@/store/checkout';
 
 export function useUser() {
   const [isAuthorized] = useAtom(authorizationAtom);
+
+  // console.log(isAuthorized);
   const { data, isLoading, error } = useQuery(
     [API_ENDPOINTS.USERS_ME],
     client.users.me,
@@ -71,9 +73,10 @@ export const useUpdateUser = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const { closeModal } = useModalAction();
+  // console.log('update user')
   return useMutation(client.users.update, {
     onSuccess: (data) => {
-      if (data?.id) {
+      if (data?._id) {
         toast.success(t('profile-update-successful'));
         closeModal();
       }
@@ -266,6 +269,7 @@ export function useRegister() {
 
   const { mutate, isLoading } = useMutation(client.users.register, {
     onSuccess: (data) => {
+      // console.log(data);
       if (data?.token && data?.permissions?.length) {
         setToken(data?.token);
         setAuthorized(true);

@@ -51,7 +51,7 @@ const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
   if (isSelected) {
     selectedVariation = product?.variation_options?.find((o: any) =>
       isEqual(
-        o.options.map((v: any) => v.value).sort(),
+        o.options?.map((v: any) => v.value).sort(),
         Object.values(attributes).sort()
       )
     );

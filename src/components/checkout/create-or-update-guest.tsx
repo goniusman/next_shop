@@ -29,6 +29,7 @@ const CreateOrUpdateGuestAddressForm = () => {
   const [selectedAddress, setAddress] = useAtom(atom);
 
   function onSubmit(values: FormValues) {
+    console.log(values);
     const formattedInput = {
       title: values.title,
       type: values.type,

@@ -27,7 +27,7 @@ const ProfilePage = () => {
 
         <Card className="w-full">
           <ProfileAddressGrid
-            userId={me.id}
+            userId={me._id}
             //@ts-ignore
             addresses={me.address}
             label={t('text-addresses')}

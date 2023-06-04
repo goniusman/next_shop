@@ -17,8 +17,9 @@ const ProfileForm = ({ user }: { user: User }) => {
     if (!user) {
       return false;
     }
+    console.log(values);
     updateProfile({
-      id: user.id,
+      id: user._id,
       name: values.name,
       profile: {
         id: user?.profile?.id,

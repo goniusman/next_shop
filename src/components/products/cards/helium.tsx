@@ -16,6 +16,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
   const { t } = useTranslation('common');
   const { name, image, unit, quantity, min_price, max_price, product_type } =
     product ?? {};
+    // console.log(product);
   const { price, basePrice, discount } = usePrice({
     amount: product.sale_price ? product.sale_price : product.price!,
     baseAmount: product.price,
@@ -73,7 +74,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
         {/* End of product info */}
 
         <div className="relative mt-7 flex min-h-6 items-center justify-between md:mt-8">
-          {product_type.toLowerCase() === 'variable' ? (
+          {product_type?.toLowerCase() === 'variable' ? (
             <>
               <div>
                 <span className="text-sm font-semibold text-accent md:text-[15px]">

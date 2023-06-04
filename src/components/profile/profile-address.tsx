@@ -31,12 +31,13 @@ export const ProfileAddressGrid: React.FC<AddressesProps> = ({
     <div className={className}>
       <AddressHeader onAdd={onAdd} count={false} label={label} />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-        {addresses?.map((address) => (
+        {addresses?.map((address, id) => (
           <AddressCard
+
             checked={false}
             address={address}
             userId={userId}
-            key={address.id}
+            key={id}
           />
         ))}
         {!Boolean(addresses?.length) && (

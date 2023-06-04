@@ -17,6 +17,7 @@ const registerFormSchema = yup.object().shape({
     .email('error-email-format')
     .required('error-email-required'),
   password: yup.string().required('error-password-required'),
+  permissions: yup.array().default(["customer"]),
 });
 
 function RegisterForm() {
@@ -24,11 +25,12 @@ function RegisterForm() {
   const { openModal } = useModalAction();
   const { mutate, isLoading, formError } = useRegister();
 
-  function onSubmit({ name, email, password }: RegisterUserInput) {
+  function onSubmit({ name, email, password, permissions }: RegisterUserInput) {
     mutate({
       name,
       email,
       password,
+      permissions
     });
   }
 

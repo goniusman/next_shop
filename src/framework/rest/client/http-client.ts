@@ -50,6 +50,8 @@ export class HttpClient {
   }
 
   static async put<T>(url: string, data: unknown) {
+    console.log(url);
+    console.log(data);
     const response = await Axios.put<T>(url, data);
     return response.data;
   }

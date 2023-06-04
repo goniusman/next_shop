@@ -414,6 +414,7 @@ export interface Address {
 
 export interface User {
   id: string;
+  _id?: any;
   name: string;
   email: string;
   wallet: {
@@ -431,7 +432,7 @@ export interface User {
 }
 
 export interface UpdateUserInput extends Partial<User> {
-  id: string;
+  _id?: any;
 }
 
 export interface LoginUserInput {
@@ -451,6 +452,7 @@ export interface RegisterUserInput {
   name: string;
   email: string;
   password: string;
+  permissions?: any;
 }
 
 export interface ForgotPasswordUserInput {

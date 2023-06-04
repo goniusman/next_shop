@@ -76,6 +76,9 @@ import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
 import { OTPVerifyResponse } from '@/types';
 
+import { AUTH_TOKEN_KEY } from '@/lib/constants';
+import Cookies from 'js-cookie';
+
 class Client {
   products = {
     all: ({
@@ -173,6 +176,28 @@ class Client {
         `${API_ENDPOINTS.PRODUCTS_REVIEWS}/${input.id}`,
         input
       ),
+  };
+  addresses = {
+    // all: ({ rating, ...params }: ReviewQueryOptions) =>
+    //   HttpClient.get<ReviewPaginator>(API_ENDPOINTS.USERS_ADDRESS, {
+    //     searchJoin: 'and',
+    //     with: 'user',
+    //     ...params,
+    //     search: HttpClient.formatSearchParams({
+    //       rating,
+    //     }),
+    //   }),
+    // get: ({ id }: { id: string }) =>
+    //   HttpClient.get<Review>(`${API_ENDPOINTS.USERS_ADDRESS}/${id}`),
+
+    // create: (input: CreateReviewInput) =>
+    //   HttpClient.post<ReviewResponse>(API_ENDPOINTS.USERS_ADDRESS, input),
+
+    // update: (input: UpdateReviewInput) =>
+    //   HttpClient.put<ReviewResponse>(
+    //     `${API_ENDPOINTS.USERS_ADDRESS}/${input.id}`,
+    //     input
+    //   ),
   };
   categories = {
     all: ({ type, ...params }: Partial<CategoryQueryOptions>) =>
@@ -277,7 +302,15 @@ class Client {
       ),
   };
   users = {
-    me: () => HttpClient.get<User>(API_ENDPOINTS.USERS_ME),
+    me: () => {
+      const token = Cookies.get(AUTH_TOKEN_KEY);
+
+      
+      const {subid: userid} = parseJwt(token)
+      // console.log(user);
+
+      return HttpClient.get<User>(`${API_ENDPOINTS.USERS_ME}/${userid}`)
+    },
     update: (user: UpdateUserInput) =>
       HttpClient.put<User>(`${API_ENDPOINTS.USERS}/${user.id}`, user),
     login: (input: LoginUserInput) =>
@@ -358,3 +391,12 @@ class Client {
 }
 
 export default new Client();
+
+
+
+export function parseJwt(token:any) {
+  if (!token) { return; }
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace('-', '+').replace('_', '/');
+  return JSON.parse(atob(base64));
+}
