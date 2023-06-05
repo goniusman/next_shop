@@ -40,8 +40,8 @@ const RefundView: React.FC = () => {
     () => [
       {
         title: t('text-id'),
-        dataIndex: 'id',
-        key: 'id',
+        dataIndex: '_id',
+        key: '_id',
         align: 'center' as AlignType,
         ellipsis: true,
         className: '!text-sm',

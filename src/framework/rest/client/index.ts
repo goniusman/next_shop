@@ -306,7 +306,7 @@ class Client {
       const token = Cookies.get(AUTH_TOKEN_KEY);
 
       
-      const {subid: userid} = parseJwt(token)
+      const {id: userid} = parseJwt(token)
       // console.log(user);
 
       return HttpClient.get<User>(`${API_ENDPOINTS.USERS_ME}/${userid}`)

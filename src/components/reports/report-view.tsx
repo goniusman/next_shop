@@ -28,8 +28,8 @@ const MyReports: React.FC = () => {
   const orderTableColumns = [
     {
       title: t('text-id'),
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: '_id',
+      key: '_id',
       align: 'center' as AlignType,
       className: '!text-sm',
       width: 80,

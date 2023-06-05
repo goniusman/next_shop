@@ -87,7 +87,7 @@ const SuborderItems: React.FC<SuborderItemsProps> = ({ items }) => {
       emptyText={t('table:empty-table-data')}
       //@ts-ignore
       data={items}
-      rowKey="id"
+      rowKey="_id"
       scroll={{ x: 800 }}
     />
   );
