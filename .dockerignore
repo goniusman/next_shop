@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+.dockerignore
+.gitignore
+.git
+.env.example
+.vscode
+README.md 
+docker-compose*
+another.js
+dist 
+.next
+.husky

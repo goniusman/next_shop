@@ -30,7 +30,6 @@
     "dayjs": "1.11.0",
     "deepmerge": "4.2.2",
     "framer-motion": "6.2.8",
-    "husky": "^8.0.1",
     "jotai": "1.6.1",
     "js-cookie": "3.0.1",
     "little-state-machine": "4.2.3",
