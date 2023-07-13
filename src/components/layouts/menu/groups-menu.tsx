@@ -106,8 +106,8 @@ const GroupsMenu: React.FC<GroupsMenuProps> = ({
               },
             }}
           >
-            {groups?.map(({ id, name, slug, icon }) => (
-              <Menu.Item key={id}>
+            {groups?.map(({ _id, name, slug, icon }) => (
+              <Menu.Item key={_id}>
                 {({ active }) => (
                   // FIX: Add ref to Link component
                   <div>

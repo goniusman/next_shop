@@ -221,6 +221,7 @@ export interface Banner {
 
 export interface Type {
   id: string;
+  _id: any;
   name: string;
   slug?: any;
   banners: Banner[];

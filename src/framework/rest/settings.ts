@@ -24,9 +24,9 @@ export function useSettings() {
     ({ queryKey, pageParam }) =>
       client.settings.all(Object.assign({}, queryKey[1], pageParam))
   );
-  
+  // console.log(data);
   return {
-    settings: data?.options ?? {},
+    settings: data[0]?.options ?? {},
     isLoading,
     error,
   };
