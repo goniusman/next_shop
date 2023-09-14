@@ -1,16 +1,16 @@
-import { Image } from '@/components/ui/image';
-import { useWindowSize } from '@/lib/use-window-size';
-import dynamic from 'next/dynamic';
-import { useTranslation } from 'next-i18next';
-import ShopSidebar from '@/components/shops/sidebar';
-import { productPlaceholder } from '@/lib/placeholders';
-import ProductsGrid from '@/components/products/grid';
 import { getLayout } from '@/components/layouts/layout';
-import { useRouter } from 'next/router';
-import classNames from 'classnames';
-import { NextPageWithLayout } from '@/types';
-import { InferGetStaticPropsType } from 'next';
+import ProductsGrid from '@/components/products/grid';
+import ShopSidebar from '@/components/shops/sidebar';
+import { Image } from '@/components/ui/image';
 import { getStaticPaths, getStaticProps } from '@/framework/shop.ssr';
+import { productPlaceholder } from '@/lib/placeholders';
+import { useWindowSize } from '@/lib/use-window-size';
+import { NextPageWithLayout } from '@/types';
+import classNames from 'classnames';
+import { InferGetStaticPropsType } from 'next';
+import { useTranslation } from 'next-i18next';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 export { getStaticPaths, getStaticProps };
 
 const CartCounterButton = dynamic(
@@ -25,8 +25,8 @@ const ShopPage: NextPageWithLayout<
   const { width } = useWindowSize();
   const { t } = useTranslation('banner');
 
-  const isGerman = router.locale === 'de';
-  const isBook = router.asPath.includes('/book');
+  // const isGerman = router.locale === 'de';
+  // const isBook = router.asPath.includes('/book');
 
   return (
     <div className="flex flex-col bg-gray-100 lg:flex-row lg:items-start lg:p-8">
@@ -43,22 +43,22 @@ const ShopPage: NextPageWithLayout<
             className="h-full w-full"
           />
         </div>
-        {/* {shop && ( */}
-        <ProductsGrid
-          className="py-8"
-          gridClassName={classNames(
-            'grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3',
-            {
-              'gap-6 md:gap-8': isBook,
-            },
-            {
-              'md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-[repeat(auto-fill,minmax(270px,1fr))]':
-                isGerman,
-            }
-          )}
-          variables={variables}
-        />
-        {/* )} */}
+        {shop && (
+          <ProductsGrid
+            className="py-8"
+            gridClassName={classNames(
+              'grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3',
+              {
+                'gap-6 md:gap-8': isBook,
+              },
+              {
+                'md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-[repeat(auto-fill,minmax(270px,1fr))]':
+                  isGerman,
+              }
+            )}
+            variables={variables}
+          />
+        )}
       </div>
       {width > 1023 && <CartCounterButton />}
     </div>

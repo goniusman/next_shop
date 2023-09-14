@@ -1,9 +1,9 @@
 import type {
   Attachment,
+  AuthResponse,
   Author,
   AuthorPaginator,
   AuthorQueryOptions,
-  AuthResponse,
   CategoryPaginator,
   CategoryQueryOptions,
   ChangePasswordUserInput,
@@ -20,18 +20,19 @@ import type {
   DownloadableFilePaginator,
   Feedback,
   ForgotPasswordUserInput,
+  GetParams,
   LoginUserInput,
   Manufacturer,
   ManufacturerPaginator,
   ManufacturerQueryOptions,
   MyQuestionQueryOptions,
   MyReportsQueryOptions,
+  OTPResponse,
   Order,
   OrderPaginator,
   OrderQueryOptions,
   OrderStatusPaginator,
   OtpLoginInputType,
-  OTPResponse,
   PasswordChangeResponse,
   PopularProductQueryOptions,
   Product,
@@ -50,6 +51,7 @@ import type {
   ReviewResponse,
   SendOtpCodeInputType,
   Settings,
+  SettingsQueryOptions,
   Shop,
   ShopPaginator,
   ShopQueryOptions,
@@ -69,12 +71,10 @@ import type {
   Wishlist,
   WishlistPaginator,
   WishlistQueryOptions,
-  GetParams,
-  SettingsQueryOptions,
 } from '@/types';
+import { OTPVerifyResponse } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
-import { OTPVerifyResponse } from '@/types';
 
 import { AUTH_TOKEN_KEY } from '@/lib/constants';
 import Cookies from 'js-cookie';
@@ -82,7 +82,7 @@ import Cookies from 'js-cookie';
 class Client {
   products = {
     all: ({
-      type,
+      type_id,
       categories,
       name,
       shop_id,
@@ -97,18 +97,18 @@ class Client {
         searchJoin: 'and',
         with: 'type;author',
         ...params,
-        search: HttpClient.formatSearchParams({
-          type,
-          categories,
-          name,
-          shop_id,
-          author,
-          manufacturer,
-          min_price,
-          max_price,
-          tags,
-          status: 'publish',
-        }),
+        // search: HttpClient.formatSearchParams({
+        //   type_id: '64f5c241fe8176ad310e2211',
+        //   categories,
+        //   name,
+        //   shop_id,
+        //   author,
+        //   manufacturer,
+        //   min_price,
+        //   max_price,
+        //   tags,
+        //   status: 'publish',
+        // }),
       }),
     popular: (params: Partial<PopularProductQueryOptions>) =>
       HttpClient.get<Product[]>(API_ENDPOINTS.PRODUCTS_POPULAR, params),
@@ -189,10 +189,8 @@ class Client {
     //   }),
     // get: ({ id }: { id: string }) =>
     //   HttpClient.get<Review>(`${API_ENDPOINTS.USERS_ADDRESS}/${id}`),
-
     // create: (input: CreateReviewInput) =>
     //   HttpClient.post<ReviewResponse>(API_ENDPOINTS.USERS_ADDRESS, input),
-
     // update: (input: UpdateReviewInput) =>
     //   HttpClient.put<ReviewResponse>(
     //     `${API_ENDPOINTS.USERS_ADDRESS}/${input.id}`,
@@ -305,11 +303,10 @@ class Client {
     me: () => {
       const token = Cookies.get(AUTH_TOKEN_KEY);
 
-      
-      const {id: userid} = parseJwt(token)
+      const { id: userid } = parseJwt(token);
       // console.log(user);
 
-      return HttpClient.get<User>(`${API_ENDPOINTS.USERS_ME}/${userid}`)
+      return HttpClient.get<User>(`${API_ENDPOINTS.USERS_ME}/${userid}`);
     },
     update: (user: UpdateUserInput) =>
       HttpClient.put<User>(`${API_ENDPOINTS.USERS}/${user.id}`, user),
@@ -392,10 +389,10 @@ class Client {
 
 export default new Client();
 
-
-
-export function parseJwt(token:any) {
-  if (!token) { return; }
+export function parseJwt(token: any) {
+  if (!token) {
+    return;
+  }
   const base64Url = token.split('.')[1];
   const base64 = base64Url.replace('-', '+').replace('_', '/');
   return JSON.parse(atob(base64));

@@ -2,7 +2,8 @@ import { useSettings } from '@/framework/settings';
 import { DefaultSeo as NextDefaultSeo } from 'next-seo';
 
 const DefaultSeo = () => {
-  const { settings } : any = useSettings();
+  const { settings }: any = useSettings();
+  // console.log(settings);
   return (
     <NextDefaultSeo
       additionalMetaTags={[

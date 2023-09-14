@@ -1,5 +1,5 @@
-import Router from 'next/router';
 import Cookies from 'js-cookie';
+import Router from 'next/router';
 
 export function getErrorMessage(error: any) {
   let processedError = {

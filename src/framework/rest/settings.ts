@@ -1,22 +1,21 @@
-import type { Settings } from '@/types';
-import { useMutation, useQuery } from 'react-query';
-import client from './client';
-import { API_ENDPOINTS } from './client/api-endpoints';
-import { useState } from 'react';
-import { FileWithPath } from 'react-dropzone';
 import { getPreviewImage } from '@/lib/get-preview-image';
-import { useAtom } from 'jotai';
 import { couponAtom } from '@/store/checkout';
-import { toast } from 'react-toastify';
+import type { Settings } from '@/types';
+import { useAtom } from 'jotai';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { FileWithPath } from 'react-dropzone';
+import { useMutation, useQuery } from 'react-query';
+import { toast } from 'react-toastify';
+import client from './client';
+import { API_ENDPOINTS } from './client/api-endpoints';
 
 export function useSettings() {
-
   const { locale } = useRouter();
 
   const formattedOptions = {
-    language: locale
+    language: locale,
   };
 
   const { data, isLoading, error } = useQuery<Settings, Error>(
@@ -24,9 +23,12 @@ export function useSettings() {
     ({ queryKey, pageParam }) =>
       client.settings.all(Object.assign({}, queryKey[1], pageParam))
   );
-  // console.log(data);
+
+  // const [obj] = data && data;
+  // console.log(typeof data);
+  // console.log(data.length);
   return {
-    settings: data[0]?.options ?? {},
+    settings: data && data.length > 0 ? data[0].options : {},
     isLoading,
     error,
   };
@@ -80,7 +82,7 @@ export function useVerifyCoupon() {
   let [formError, setFormError] = useState<any>(null);
 
   const { mutate, isLoading } = useMutation(client.coupons.verify, {
-    onSuccess: (data:any) => {
+    onSuccess: (data: any) => {
       if (!data.is_valid) {
         setFormError({
           code: t('error-invalid-coupon'),

@@ -26,7 +26,7 @@ export interface HomePageProps {
 }
 
 export interface SearchParamOptions {
-  type: string;
+  type_id?: string;
   name: string;
   categories: string;
   tags: string;
@@ -79,6 +79,7 @@ export interface ProductQueryOptions extends QueryOptions {
   name: string;
   categories: string;
   tags: string;
+  type_id: string;
   type: string;
   manufacturer: string;
   author: string;
