@@ -1,34 +1,34 @@
+import {HeartFillIcon} from '@/components/icons/heart-fill';
+import {HeartOutlineIcon} from '@/components/icons/heart-outline';
+import {StarIcon} from '@/components/icons/star-icon';
+import {AddToCart} from '@/components/products/add-to-cart/add-to-cart';
 import BackButton from '@/components/ui/back-button';
-import { AddToCart } from '@/components/products/add-to-cart/add-to-cart';
-import usePrice from '@/lib/use-price';
-import { ThumbsCarousel } from '@/components/ui/thumb-carousel';
-import { useTranslation } from 'next-i18next';
-import { getVariations } from '@/lib/get-variations';
-import { useEffect, useMemo, useRef } from 'react';
-import isEqual from 'lodash/isEqual';
-import isEmpty from 'lodash/isEmpty';
-import Truncate from '@/components/ui/truncate';
-import { scroller, Element } from 'react-scroll';
-import CategoryBadges from './category-badges';
-import VariationPrice from './variation-price';
-import { useRouter } from 'next/router';
-import { Routes } from '@/config/routes';
-import type { Product } from '@/types';
-import { useAtom } from 'jotai';
-import VariationGroups from './variation-groups';
-import { isVariationSelected } from '@/lib/is-variation-selected';
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import { stickyShortDetailsAtom } from '@/store/sticky-short-details-atom';
-import { useAttributes } from './attributes.context';
-import classNames from 'classnames';
-import { displayImage } from '@/lib/display-product-preview-images';
-import { HeartOutlineIcon } from '@/components/icons/heart-outline';
-import { HeartFillIcon } from '@/components/icons/heart-fill';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
-import { useUser } from '@/framework/user';
-import { useInWishlist, useToggleWishlist } from '@/framework/wishlist';
-import { useIntersection } from 'react-use';
-import { StarIcon } from '@/components/icons/star-icon';
+import {useModalAction} from '@/components/ui/modal/modal.context';
+import {ThumbsCarousel} from '@/components/ui/thumb-carousel';
+import Truncate from '@/components/ui/truncate';
+import {Routes} from '@/config/routes';
+import {useUser} from '@/framework/user';
+import {useInWishlist,useToggleWishlist} from '@/framework/wishlist';
+import {displayImage} from '@/lib/display-product-preview-images';
+import {getVariations} from '@/lib/get-variations';
+import {isVariationSelected} from '@/lib/is-variation-selected';
+import usePrice from '@/lib/use-price';
+import {stickyShortDetailsAtom} from '@/store/sticky-short-details-atom';
+import type {Product} from '@/types';
+import classNames from 'classnames';
+import {useAtom} from 'jotai';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
+import {useTranslation} from 'next-i18next';
+import {useRouter} from 'next/router';
+import {useEffect,useMemo,useRef} from 'react';
+import {Element,scroller} from 'react-scroll';
+import {useIntersection} from 'react-use';
+import {useAttributes} from './attributes.context';
+import CategoryBadges from './category-badges';
+import VariationGroups from './variation-groups';
+import VariationPrice from './variation-price';
 
 function FavoriteButton({
   productId,
@@ -96,6 +96,7 @@ const Details: React.FC<Props> = ({
   isModal = false,
 }) => {
   const {
+    _id,
     id,
     name,
     image, //could only had image we need to think it also
@@ -111,16 +112,21 @@ const Details: React.FC<Props> = ({
   } = product ?? {};
 
   const { t } = useTranslation('common');
+
   const [_, setShowStickyShortDetails] = useAtom(stickyShortDetailsAtom);
 
   const router = useRouter();
+
   const { closeModal } = useModalAction();
+
   const intersectionRef = useRef(null);
+
   const intersection = useIntersection(intersectionRef, {
     root: null,
     rootMargin: '0px',
     threshold: 1,
   });
+
   useEffect(() => {
     if (intersection && intersection.isIntersecting) {
       setShowStickyShortDetails(false);
@@ -131,6 +137,7 @@ const Details: React.FC<Props> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [intersection]);
+
   const { attributes } = useAttributes();
 
   const { price, basePrice, discount } = usePrice({
@@ -147,12 +154,15 @@ const Details: React.FC<Props> = ({
     () => getVariations(product?.variations),
     [product?.variations]
   );
+
   const isSelected = isVariationSelected(variations, attributes);
+
   let selectedVariation: any = {};
+
   if (isSelected) {
     selectedVariation = product?.variation_options?.find((o: any) =>
       isEqual(
-        o.options.map((v: any) => v.value).sort(),
+        o.options?.map((v: any) => v.value).sort(),
         Object.values(attributes).sort()
       )
     );
@@ -166,6 +176,7 @@ const Details: React.FC<Props> = ({
   };
 
   const hasVariations = !isEmpty(variations);
+
   const previewImages = displayImage(selectedVariation?.image, gallery, image);
 
   return (

@@ -1,12 +1,12 @@
-import { Image } from '@/components/ui/image';
-import { motion } from 'framer-motion';
-import { siteSettings } from '@/config/site';
-import Counter from '@/components/ui/counter';
 import { CloseIcon } from '@/components/icons/close-icon';
+import Counter from '@/components/ui/counter';
+import { Image } from '@/components/ui/image';
+import { siteSettings } from '@/config/site';
 import { fadeInOut } from '@/lib/motion/fade-in-out';
 import usePrice from '@/lib/use-price';
-import { useTranslation } from 'next-i18next';
 import { useCart } from '@/store/quick-cart/cart.context';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'next-i18next';
 
 interface CartItemProps {
   item: any;
@@ -14,8 +14,14 @@ interface CartItemProps {
 
 const CartItem = ({ item }: CartItemProps) => {
   const { t } = useTranslation('common');
-  const { isInStock, clearItemFromCart, addItemToCart, removeItemFromCart, updateCartLanguage, language } =
-    useCart();
+  const {
+    isInStock,
+    clearItemFromCart,
+    addItemToCart,
+    removeItemFromCart,
+    updateCartLanguage,
+    language,
+  } = useCart();
 
   const { price } = usePrice({
     amount: item.price,
@@ -26,7 +32,7 @@ const CartItem = ({ item }: CartItemProps) => {
   function handleIncrement(e: any) {
     e.stopPropagation();
     // Check language and update
-    if (item?.language !== language){
+    if (item?.language !== language) {
       updateCartLanguage(item?.language);
     }
     addItemToCart(item, 1);
@@ -35,7 +41,7 @@ const CartItem = ({ item }: CartItemProps) => {
     e.stopPropagation();
     removeItemFromCart(item.id);
   };
-  const outOfStock = !isInStock(item.id);
+  const outOfStock = !isInStock(item._id);
   return (
     <motion.div
       layout

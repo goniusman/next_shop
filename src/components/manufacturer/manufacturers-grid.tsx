@@ -1,13 +1,13 @@
 import Button from '@/components/ui/button';
-import NotFound from '@/components/ui/not-found';
-import { useTranslation } from 'next-i18next';
-import rangeMap from '@/lib/range-map';
-import ManufacturerLoader from '@/components/ui/loaders/manufacturer-loader';
-import { useManufacturers } from '@/framework/manufacturer';
 import ErrorMessage from '@/components/ui/error-message';
-import ManufacturerCard from './card';
+import ManufacturerLoader from '@/components/ui/loaders/manufacturer-loader';
+import NotFound from '@/components/ui/not-found';
 import { MANUFACTURERS_PER_PAGE } from '@/framework/client/variables';
+import { useManufacturers } from '@/framework/manufacturer';
+import rangeMap from '@/lib/range-map';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import ManufacturerCard from './card';
 
 interface ManufacturersGridProps {
   limit?: number;
@@ -20,7 +20,7 @@ const ManufacturersGrid: React.FC<ManufacturersGridProps> = ({
   const { manufacturers, loadMore, isLoadingMore, isLoading, hasMore, error } =
     useManufacturers({
       language: locale,
-      limit
+      limit,
     });
   if (error) return <ErrorMessage message={error.message} />;
 
@@ -40,7 +40,7 @@ const ManufacturersGrid: React.FC<ManufacturersGridProps> = ({
               <ManufacturerLoader key={i} uniqueKey={`manufacturer-${i}`} />
             ))
           : manufacturers.map((item) => (
-              <ManufacturerCard key={item.id} item={item} />
+              <ManufacturerCard key={item._id} item={item} />
             ))}
       </div>
       {hasMore && (

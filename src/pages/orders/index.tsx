@@ -1,14 +1,14 @@
+import DashboardSidebar from '@/components/dashboard/sidebar';
+import { getLayout as getSiteLayout } from '@/components/layouts/layout';
+import OrderDetails from '@/components/orders/order-details';
 import OrderList, { useSelectedOrder } from '@/components/orders/order-list';
+import OrderListMobile from '@/components/orders/order-list-mobile';
 import Seo from '@/components/seo/seo';
 import ErrorMessage from '@/components/ui/error-message';
-import { useOrders } from '@/framework/order';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
-import isEmpty from 'lodash/isEmpty';
-import OrderDetails from '@/components/orders/order-details';
-import OrderListMobile from '@/components/orders/order-list-mobile';
 import NotFound from '@/components/ui/not-found';
-import { getLayout as getSiteLayout } from '@/components/layouts/layout';
-import DashboardSidebar from '@/components/dashboard/sidebar';
+import { useOrders } from '@/framework/order';
+import isEmpty from 'lodash/isEmpty';
 export { getStaticProps } from '@/framework/general.ssr';
 
 function NoOrderFound() {
@@ -24,7 +24,7 @@ export default function OrdersPage() {
     useOrders();
   const [selectedOrder] = useSelectedOrder();
 
-  const ordersItem:any = orders;
+  const ordersItem: any = orders;
 
   if (error) return <ErrorMessage message={error.message} />;
   // if (isLoading && !isEmpty(orders)) {
@@ -52,7 +52,9 @@ export default function OrdersPage() {
         />
         {selectedOrder && (
           <OrderDetails
-            order={ordersItem.find((order:any) => order.id === selectedOrder.id)!}
+            order={
+              ordersItem.find((order: any) => order._id === selectedOrder._id)!
+            }
           />
         )}
       </div>

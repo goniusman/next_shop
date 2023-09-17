@@ -83,7 +83,7 @@ export const OrderItems = ({
       align: 'center',
       width: 100,
       render: function renderQuantity(pivot: any) {
-        return <p className="text-base">{pivot.order_quantity}</p>;
+        return <p className="text-base">{pivot?.order_quantity}</p>;
       },
     },
     {
@@ -94,7 +94,7 @@ export const OrderItems = ({
       width: 100,
       render: function RenderPrice(pivot: any) {
         const { price } = usePrice({
-          amount: pivot.subtotal,
+          amount: pivot?.subtotal,
         });
         return <p>{price}</p>;
       },

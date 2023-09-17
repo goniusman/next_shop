@@ -1,5 +1,5 @@
-import type { NextPage } from 'next';
-import type { ReactElement, ReactNode } from 'react';
+import type {NextPage} from 'next';
+import type {ReactElement,ReactNode} from 'react';
 
 export type NextPageWithLayout<P = {}> = NextPage<P> & {
   authenticationRequired?: boolean;
@@ -166,6 +166,7 @@ export interface SettingsQueryOptions extends QueryOptions {}
 export interface WishlistQueryOptions extends QueryOptions {}
 
 export interface Product {
+  _id: any;
   id: string;
   name: string;
   slug: string;
@@ -206,6 +207,7 @@ export interface RatingCount {
 
 export interface Category {
   id: string;
+  _id: any;
   name: string;
   slug: string;
   description: string;
@@ -215,6 +217,7 @@ export interface Category {
 
 export interface Banner {
   id: string;
+  _id: any;
   title: string;
   description: string;
   image: Attachment;
@@ -237,6 +240,7 @@ export interface Type {
 
 export interface Shop {
   id: string;
+  _id: any;
   name: string;
   slug: string;
   description: string;
@@ -245,18 +249,21 @@ export interface Shop {
 
 export interface Author {
   id: string;
+  _id: any;
   name: string;
   slug: string;
 }
 
 export interface Manufacturer {
   id: string;
+  _id: any;
   name: string;
   slug: string;
 }
 
 export interface Coupon {
   id: string;
+  _id: any;
   name: string;
   slug: string;
   amount?: string;
@@ -265,12 +272,14 @@ export interface Coupon {
 
 export interface Tag {
   id: string;
+  _id: any;
   name: string;
   slug: string;
 }
 
 export interface Feedback {
   id: string;
+  _id: any;
   user_id: string;
   model_type: string;
   model_id: string;
@@ -282,6 +291,7 @@ export interface Feedback {
 
 export interface Settings {
   id: string;
+  _id: any;
   name: string;
   slug: string;
   options: {
@@ -290,6 +300,7 @@ export interface Settings {
 }
 
 export interface Order {
+  _id: any;
   id: number | string;
   tracking_number: string;
   customer_id: number | string;
@@ -336,6 +347,7 @@ export interface CreateReviewInput {
 
 export interface UpdateReviewInput extends CreateReviewInput {
   id: string;
+  _id: any;
 }
 
 export interface ReviewResponse {
@@ -370,6 +382,7 @@ export interface CreateAbuseReportInput {
 
 export interface Feedback {
   id: string;
+  _id: any;
   user_id: string;
   model_type: string;
   model_id: string;
@@ -381,6 +394,7 @@ export interface Feedback {
 
 export interface Refund {
   id: string;
+  _id: any;
   title: string;
   description: string;
   images: Attachment[];
@@ -402,6 +416,7 @@ enum RefundStatus {
 
 export interface Address {
   id: string;
+  _id: any;
   title: string;
   type: any;
   address: {
@@ -492,6 +507,7 @@ export interface OTPResponse {
   success: boolean;
   provider: string;
   id: string;
+  _id: any;
   phone_number: string;
   is_contact_exist: boolean;
 }
@@ -517,11 +533,13 @@ export interface OTPVerifyResponse {
 
 export interface DigitalFile {
   id: string;
+  _id: any;
   fileable: Product;
 }
 
 export interface DownloadableFile {
   id: string;
+  _id: any;
   purchase_key: string;
   digital_file_id: string;
   customer_id: string;
@@ -578,6 +596,7 @@ export interface CreateOrderInput {
 
 export interface Review {
   id: string;
+  _id: any;
   name: string;
   rating: number;
   comment: string;
@@ -595,6 +614,7 @@ export interface Review {
 
 export interface Question {
   id: string;
+  _id: any;
   answer: string;
   my_feedback: Feedback;
   negative_feedbacks_count: number;
@@ -607,12 +627,14 @@ export interface Question {
 
 export interface Reports {
   id: string;
+  _id: any;
   message: string;
   created_at: string;
 }
 
 export interface OrderStatus {
   id: string;
+  _id: any;
   name: string;
   color: string;
   serial: number;
@@ -645,6 +667,7 @@ export interface VerifiedCheckoutData {
 
 export interface Wishlist {
   id: string;
+  _id: any;
   product: Product;
   product_id: string;
   user: User[];

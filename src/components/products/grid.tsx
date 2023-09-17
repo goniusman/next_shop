@@ -1,14 +1,14 @@
-import { useTranslation } from 'react-i18next';
-import cn from 'classnames';
+import ProductCard from '@/components/products/cards/card';
 import Button from '@/components/ui/button';
+import ErrorMessage from '@/components/ui/error-message';
 import ProductLoader from '@/components/ui/loaders/product-loader';
 import NotFound from '@/components/ui/not-found';
-import rangeMap from '@/lib/range-map';
-import ProductCard from '@/components/products/cards/card';
-import ErrorMessage from '@/components/ui/error-message';
-import { useProducts } from '@/framework/product';
 import { PRODUCTS_PER_PAGE } from '@/framework/client/variables';
+import { useProducts } from '@/framework/product';
+import rangeMap from '@/lib/range-map';
 import type { Product } from '@/types';
+import cn from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   limit?: number;
@@ -68,7 +68,7 @@ export function Grid({
               <ProductLoader key={i} uniqueKey={`product-${i}`} />
             ))
           : products?.map((product) => (
-              <ProductCard product={product} key={product.id} />
+              <ProductCard product={product} key={product._id} />
             ))}
       </div>
       {hasMore && (
@@ -100,7 +100,7 @@ export default function ProductsGrid({
   const { products, loadMore, isLoadingMore, isLoading, hasMore, error } =
     useProducts(variables);
 
-  const productsItem:any = products;
+  const productsItem: any = products;
   return (
     <Grid
       products={productsItem}

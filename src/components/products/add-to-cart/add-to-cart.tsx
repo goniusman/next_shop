@@ -1,5 +1,5 @@
-import Counter from '@/components/ui/counter';
 import AddToCartBtn from '@/components/products/add-to-cart/add-to-cart-btn';
+import Counter from '@/components/ui/counter';
 import { cartAnimation } from '@/lib/cart-animation';
 import { useCart } from '@/store/quick-cart/cart.context';
 import { generateCartItem } from '@/store/quick-cart/generate-cart-item';
@@ -41,7 +41,7 @@ export const AddToCart = ({
     getItemFromCart,
     isInCart,
     updateCartLanguage,
-    language
+    language,
   } = useCart();
   const item = generateCartItem(data, variation);
   const handleAddClick = (
@@ -49,9 +49,11 @@ export const AddToCart = ({
   ) => {
     e.stopPropagation();
     // Check language and update
-    if (item?.language !== language){
+    if (item?.language !== language) {
       updateCartLanguage(item?.language);
     }
+
+    // console.log(item);
     addItemToCart(item, 1);
     if (!isInCart(item.id)) {
       cartAnimation(e);

@@ -1,12 +1,12 @@
-import ProductLoader from '@/components/ui/loaders/product-loader';
-import NotFound from '@/components/ui/not-found';
-import rangeMap from '@/lib/range-map';
 import ProductCard from '@/components/products/cards/card';
 import ErrorMessage from '@/components/ui/error-message';
-import { usePopularProducts } from '@/framework/product';
+import ProductLoader from '@/components/ui/loaders/product-loader';
+import NotFound from '@/components/ui/not-found';
 import SectionBlock from '@/components/ui/section-block';
-import { useTranslation } from 'next-i18next';
+import { usePopularProducts } from '@/framework/product';
+import rangeMap from '@/lib/range-map';
 import classNames from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 interface Props {
   className?: string;
@@ -39,8 +39,8 @@ export default function PopularProductsGrid({
             ? rangeMap(limit, (i) => (
                 <ProductLoader key={i} uniqueKey={`product-${i}`} />
               ))
-            : products.map((product:any) => (
-                <ProductCard product={product} key={product?.id} />
+            : products.map((product: any) => (
+                <ProductCard product={product} key={product?._id} />
               ))}
         </div>
       </div>

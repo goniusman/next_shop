@@ -1,21 +1,21 @@
-import ErrorMessage from '@/components/ui/error-message';
-import Image from 'next/image';
-import { useTranslation } from 'next-i18next';
-import Link from '@/components/ui/link';
 import Button from '@/components/ui/button';
-import { productPlaceholder } from '@/lib/placeholders';
-import NotFound from '@/components/ui/not-found';
-import Rating from '@/components/ui/rating-badge';
-import usePrice from '@/lib/use-price';
-import { useRemoveFromWishlist, useWishlist } from '@/framework/wishlist';
-import type { Product } from '@/types';
-import { Routes } from '@/config/routes';
-import { AddToCart } from './add-to-cart/add-to-cart';
+import ErrorMessage from '@/components/ui/error-message';
+import Link from '@/components/ui/link';
 import WishlistLoader from '@/components/ui/loaders/wishlist-loader';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import rangeMap from '@/lib/range-map';
-import AddToCartBtn from './add-to-cart/add-to-cart-btn';
+import NotFound from '@/components/ui/not-found';
+import Rating from '@/components/ui/rating-badge';
+import { Routes } from '@/config/routes';
+import { useRemoveFromWishlist, useWishlist } from '@/framework/wishlist';
 import { DEFAULT_LANGUAGE } from '@/lib/constants';
+import { productPlaceholder } from '@/lib/placeholders';
+import rangeMap from '@/lib/range-map';
+import usePrice from '@/lib/use-price';
+import type { Product } from '@/types';
+import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
+import { AddToCart } from './add-to-cart/add-to-cart';
+import AddToCartBtn from './add-to-cart/add-to-cart-btn';
 
 function WishlistItem({ product }: { product: Product }) {
   const { t } = useTranslation('common');
@@ -120,7 +120,7 @@ function WishlistItem({ product }: { product: Product }) {
             <span className="flex h-7 w-px border-r border-dashed border-gray-300" />
             <button
               className="whitespace-nowrap text-sm font-semibold text-red-500 hover:underline sm:mt-0"
-              onClick={() => removeFromWishlist(product?.id)}
+              onClick={() => removeFromWishlist(product?._id)}
               disabled={isLoading}
             >
               {t('text-remove')}

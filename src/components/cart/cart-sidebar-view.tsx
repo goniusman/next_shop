@@ -1,17 +1,17 @@
-import { useRouter } from 'next/router';
-import { motion, AnimateSharedLayout } from 'framer-motion';
-import CartCheckBagIcon from '@/components/icons/cart-check-bag';
-import EmptyCartIcon from '@/components/icons/empty-cart';
-import { CloseIcon } from '@/components/icons/close-icon';
 import CartItem from '@/components/cart/cart-item';
-import { fadeInOut } from '@/lib/motion/fade-in-out';
+import CartCheckBagIcon from '@/components/icons/cart-check-bag';
+import { CloseIcon } from '@/components/icons/close-icon';
+import EmptyCartIcon from '@/components/icons/empty-cart';
 import { Routes } from '@/config/routes';
-import usePrice from '@/lib/use-price';
-import { useCart } from '@/store/quick-cart/cart.context';
 import { formatString } from '@/lib/format-string';
-import { useTranslation } from 'next-i18next';
-import { useAtom } from 'jotai';
+import { fadeInOut } from '@/lib/motion/fade-in-out';
+import usePrice from '@/lib/use-price';
 import { drawerAtom } from '@/store/drawer-atom';
+import { useCart } from '@/store/quick-cart/cart.context';
+import { AnimateSharedLayout, motion } from 'framer-motion';
+import { useAtom } from 'jotai';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 const CartSidebarView = () => {
   const { t } = useTranslation('common');
@@ -22,11 +22,11 @@ const CartSidebarView = () => {
     const isRegularCheckout = items.find((item) => !Boolean(item.is_digital));
     if (isRegularCheckout) {
       router.push(Routes.checkout, undefined, {
-        locale: language
+        locale: language,
       });
     } else {
       router.push(Routes.checkoutDigital, undefined, {
-        locale: language
+        locale: language,
       });
     }
 
@@ -58,7 +58,7 @@ const CartSidebarView = () => {
       <AnimateSharedLayout>
         <motion.div layout className="flex-grow pt-16 pb-20">
           {items.length > 0 ? (
-            items?.map((item) => <CartItem item={item} key={item.id} />)
+            items?.map((item) => <CartItem item={item} key={item._id} />)
           ) : (
             <motion.div
               layout
