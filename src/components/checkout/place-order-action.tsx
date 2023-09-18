@@ -1,30 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useAtom } from 'jotai';
-import isEmpty from 'lodash/isEmpty';
-import classNames from 'classnames';
-import { useCreateOrder, useOrderStatuses } from '@/framework/order';
-import ValidationError from '@/components/ui/validation-error';
 import Button from '@/components/ui/button';
+import ValidationError from '@/components/ui/validation-error';
+import { useCreateOrder, useOrderStatuses } from '@/framework/order';
+import { useUser } from '@/framework/user';
 import { formatOrderedProduct } from '@/lib/format-ordered-product';
-import { useCart } from '@/store/quick-cart/cart.context';
 import { checkoutAtom, discountAtom, walletAtom } from '@/store/checkout';
+import { useCart } from '@/store/quick-cart/cart.context';
 import {
   calculatePaidTotal,
   calculateTotal,
 } from '@/store/quick-cart/cart.utils';
+import classNames from 'classnames';
+import { useAtom } from 'jotai';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
   const { t } = useTranslation('common');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { createOrder, isLoading } = useCreateOrder();
-  const { locale } : any = useRouter();
+  const { locale }: any = useRouter();
   const { items } = useCart();
+  const { me } = useUser();
 
   const { orderStatuses } = useOrderStatuses({
     limit: 1,
-    language: locale
+    language: locale,
   });
 
   const [
@@ -41,13 +43,13 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
   ] = useAtom(checkoutAtom);
   const [discount] = useAtom(discountAtom);
   const [use_wallet_points] = useAtom(walletAtom);
-
+  // console.log(orderStatuses);
   useEffect(() => {
     setErrorMessage(null);
   }, [payment_gateway]);
 
   const available_items = items?.filter(
-    (item) => !verified_response?.unavailable_products?.includes(item.id)
+    (item) => !verified_response?.unavailable_products?.includes(item._id)
   );
 
   const subtotal = calculateTotal(available_items);
@@ -75,13 +77,14 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
     let input = {
       //@ts-ignore
       products: available_items?.map((item) => formatOrderedProduct(item)),
-      status: orderStatuses[0]?.id ?? '1',
+      status: orderStatuses[0]?._id ?? '1',
       amount: subtotal,
       coupon_id: Number(coupon?.id),
       discount: discount ?? 0,
       paid_total: total,
       sales_tax: verified_response?.total_tax,
       delivery_fee: verified_response?.shipping_charge,
+      customer: me?._id,
       total,
       delivery_time: delivery_time?.title,
       customer_contact,

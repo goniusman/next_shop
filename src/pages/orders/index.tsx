@@ -40,9 +40,13 @@ export default function OrdersPage() {
   if (!isLoading && isEmpty(ordersItem)) {
     return <NoOrderFound />;
   }
+
+  // console.log(ordersItem);
+
   return (
     <>
       <Seo noindex={true} nofollow={true} />
+
       <div className="hidden w-full overflow-hidden lg:flex">
         <OrderList
           orders={ordersItem}
@@ -58,6 +62,7 @@ export default function OrdersPage() {
           />
         )}
       </div>
+
       <OrderListMobile
         isLoadingMore={isLoadingMore}
         onLoadMore={loadMore}

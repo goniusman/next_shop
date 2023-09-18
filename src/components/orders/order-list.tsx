@@ -1,10 +1,10 @@
 import Button from '@/components/ui/button';
 import Scrollbar from '@/components/ui/scrollbar';
-import { useTranslation } from 'next-i18next';
-import OrderCard from './order-card';
-import { atom, useAtom } from 'jotai';
-import { useEffect } from 'react';
 import type { Order } from '@/types';
+import { atom, useAtom } from 'jotai';
+import { useTranslation } from 'next-i18next';
+import { useEffect } from 'react';
+import OrderCard from './order-card';
 
 const selectedOrderAtom = atom<Order | null>(null);
 export function useSelectedOrder() {
@@ -43,7 +43,7 @@ export default function OrderList({
                 key={index}
                 order={order}
                 onClick={() => setSelectedOrder(order)}
-                isActive={order?.id === selectedOrder?.id}
+                isActive={order?._id === selectedOrder?._id}
               />
             ))}
             {hasMore && (

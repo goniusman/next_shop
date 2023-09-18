@@ -1,23 +1,23 @@
-import { useEffect } from 'react';
-import dayjs from 'dayjs';
+import { CheckMark } from '@/components/icons/checkmark';
+import { OrderItems } from '@/components/orders/order-items';
+import OrderStatuses from '@/components/orders/statuses';
+import SuborderItems from '@/components/orders/suborder-items';
+import Badge from '@/components/ui/badge';
 import Link from '@/components/ui/link';
-import usePrice from '@/lib/use-price';
+import Spinner from '@/components/ui/loaders/spinner/spinner';
+import { Routes } from '@/config/routes';
+import { useOrder } from '@/framework/order';
 import { formatAddress } from '@/lib/format-address';
 import { formatString } from '@/lib/format-string';
-import { Routes } from '@/config/routes';
-import { useTranslation } from 'next-i18next';
-import { useCart } from '@/store/quick-cart/cart.context';
-import { CheckMark } from '@/components/icons/checkmark';
-import Badge from '@/components/ui/badge';
-import { OrderItems } from '@/components/orders/order-items';
-import { useAtom } from 'jotai';
+import usePrice from '@/lib/use-price';
 import { clearCheckoutAtom } from '@/store/checkout';
-import SuborderItems from '@/components/orders/suborder-items';
-import Spinner from '@/components/ui/loaders/spinner/spinner';
+import { useCart } from '@/store/quick-cart/cart.context';
+import dayjs from 'dayjs';
+import { useAtom } from 'jotai';
 import isEmpty from 'lodash/isEmpty';
-import OrderStatuses from '@/components/orders/statuses';
-import { useOrder } from '@/framework/order';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 function OrderView({ order, language }: any) {
   const { t } = useTranslation('common');
@@ -214,7 +214,7 @@ function OrderView({ order, language }: any) {
           {/* end of order details */}
         </div>
         <div className="mt-12">
-          <OrderItems products={order?.products} orderId={order?.id} />
+          <OrderItems products={order?.products} orderId={order?._id} />
         </div>
         {order?.children?.length > 1 ? (
           <div>
@@ -249,6 +249,7 @@ export default function Order() {
   const { order, isLoading } = useOrder({
     tracking_number: query.tracking_number!.toString(),
   });
+  // console.log(order);
   if (isLoading) {
     return <Spinner showText={false} />;
   }

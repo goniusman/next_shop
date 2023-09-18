@@ -1,20 +1,21 @@
-import { Table } from '@/components/ui/table';
-import usePrice from '@/lib/use-price';
-import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@/lib/locals';
 import { Image } from '@/components/ui/image';
-import { productPlaceholder } from '@/lib/placeholders';
-import { useModalAction } from '@/components/ui/modal/modal.context';
 import Link from '@/components/ui/link';
+import { useModalAction } from '@/components/ui/modal/modal.context';
+import { Table } from '@/components/ui/table';
 import { Routes } from '@/config/routes';
 import { getReview } from '@/lib/get-review';
+import { useIsRTL } from '@/lib/locals';
+import { productPlaceholder } from '@/lib/placeholders';
+import usePrice from '@/lib/use-price';
+import { useTranslation } from 'next-i18next';
 
 //FIXME: need to fix this usePrice hooks issue within the table render we may check with nested property
 const OrderItemList = (_: any, record: any) => {
   const { price } = usePrice({
-    amount: record.pivot?.unit_price,
+    amount: record?.unit_price,
   });
-  let name = record.name;
+  console.log(record);
+  let name = record?.product_id?.name;
   if (record?.pivot?.variation_option_id) {
     const variationTitle = record?.variation_options?.find(
       (vo: any) => vo?.id === record?.pivot?.variation_option_id
@@ -25,7 +26,7 @@ const OrderItemList = (_: any, record: any) => {
     <div className="flex items-center">
       <div className="relative flex h-16 w-16 shrink-0 overflow-hidden rounded">
         <Image
-          src={record.image?.thumbnail ?? productPlaceholder}
+          src={record?.product_id?.image?.thumbnail ?? productPlaceholder}
           alt={name}
           className="h-full w-full object-cover"
           layout="fill"
@@ -35,9 +36,9 @@ const OrderItemList = (_: any, record: any) => {
       <div className="flex flex-col overflow-hidden ltr:ml-4 rtl:mr-4">
         <div className="mb-1 flex space-x-1 rtl:space-x-reverse">
           <Link
-            href={Routes.product(record?.slug)}
+            href={Routes.product(record?.product_id?.slug)}
             className="inline-block overflow-hidden truncate text-sm text-body transition-colors hover:text-accent hover:underline"
-            locale={record?.language}
+            locale={record?.product_id?.language}
           >
             {name}
           </Link>
@@ -45,7 +46,7 @@ const OrderItemList = (_: any, record: any) => {
             x
           </span>
           <span className="inline-block overflow-hidden truncate text-sm font-semibold text-heading">
-            {record.unit}
+            {record?.product_id?.unit}
           </span>
         </div>
         <span className="mb-1 inline-block overflow-hidden truncate text-sm font-semibold text-accent">
@@ -55,6 +56,7 @@ const OrderItemList = (_: any, record: any) => {
     </div>
   );
 };
+
 export const OrderItems = ({
   products,
   orderId,
@@ -65,7 +67,7 @@ export const OrderItems = ({
   const { t } = useTranslation('common');
   const { alignLeft, alignRight } = useIsRTL();
   const { openModal } = useModalAction();
-
+  // console.log(products);
   const orderTableColumns = [
     {
       title: <span className="ltr:pl-20 rtl:pr-20">{t('text-item')}</span>,
@@ -78,23 +80,24 @@ export const OrderItems = ({
     },
     {
       title: t('text-quantity'),
-      dataIndex: 'pivot',
-      key: 'pivot',
+      dataIndex: 'order_quantity',
+      key: 'order_quantity',
       align: 'center',
       width: 100,
-      render: function renderQuantity(pivot: any) {
-        return <p className="text-base">{pivot?.order_quantity}</p>;
+      render: function renderQuantity(order_quantity: any) {
+        // console.log(pivot);
+        return <p className="text-base">{order_quantity}</p>;
       },
     },
     {
       title: t('text-price'),
-      dataIndex: 'pivot',
-      key: 'price',
+      dataIndex: 'subtotal',
+      key: 'subtotal',
       align: alignRight,
       width: 100,
-      render: function RenderPrice(pivot: any) {
+      render: function RenderPrice(subtotal: any) {
         const { price } = usePrice({
-          amount: pivot?.subtotal,
+          amount: subtotal,
         });
         return <p>{price}</p>;
       },
