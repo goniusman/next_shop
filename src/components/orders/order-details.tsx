@@ -1,15 +1,15 @@
-import usePrice from '@/lib/use-price';
-import { formatAddress } from '@/lib/format-address';
+import {Eye} from '@/components/icons/eye-icon';
+import {SadFaceIcon} from '@/components/icons/sad-face';
 import OrderStatuses from '@/components/orders/statuses';
-import { useTranslation } from 'next-i18next';
-import Link from '@/components/ui/link';
-import { Routes } from '@/config/routes';
-import { Eye } from '@/components/icons/eye-icon';
-import { OrderItems } from './order-items';
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import { SadFaceIcon } from '@/components/icons/sad-face';
 import Badge from '@/components/ui/badge';
-import type { Order } from '@/types';
+import Link from '@/components/ui/link';
+import {useModalAction} from '@/components/ui/modal/modal.context';
+import {Routes} from '@/config/routes';
+import {formatAddress} from '@/lib/format-address';
+import usePrice from '@/lib/use-price';
+import type {Order} from '@/types';
+import {useTranslation} from 'next-i18next';
+import {OrderItems} from './order-items';
 
 interface Props {
   order: Order;
@@ -85,14 +85,14 @@ function RefundView({
 const OrderDetails = ({ order }: Props) => {
   const { t } = useTranslation('common');
   const {
-    id,
+    _id,
     products,
     status,
     shipping_address,
     billing_address,
     tracking_number,
     refund,
-  } : any = order ?? {};
+  }: any = order ?? {};
 
   const { price: amount } = usePrice({
     amount: order?.amount,
@@ -118,10 +118,10 @@ const OrderDetails = ({ order }: Props) => {
           {tracking_number}
         </h2>
         <div className="flex items-center">
-          <RefundView status={refund?.status} orderId={id} />
+          <RefundView status={refund?.status} orderId={_id} />
 
           <Link
-            href={Routes.order(tracking_number)}
+            href={Routes.order(_id)}
             className="flex items-center text-sm font-semibold text-accent no-underline transition duration-200 hover:text-accent-hover focus:text-accent-hover"
           >
             <Eye width={20} className="ltr:mr-2 rtl:ml-2" />
@@ -187,7 +187,7 @@ const OrderDetails = ({ order }: Props) => {
         <div className="flex w-full items-center justify-center px-6">
           <OrderStatuses status={status?.serial} language={order?.language} />
         </div>
-        <OrderItems products={products} orderId={id} />
+        <OrderItems products={products} orderId={_id} />
       </div>
     </div>
   );
