@@ -1,14 +1,14 @@
-import type { NextPageWithLayout } from '@/types';
 import { getLayout } from '@/components/layouts/layout';
 import Button from '@/components/ui/button';
-import NotFound from '@/components/ui/not-found';
-import { useTranslation } from 'next-i18next';
-import rangeMap from '@/lib/range-map';
-import CouponLoader from '@/components/ui/loaders/coupon-loader';
-import { useShops } from '@/framework/shop';
-import ErrorMessage from '@/components/ui/error-message';
 import ShopCard from '@/components/ui/cards/shop';
+import ErrorMessage from '@/components/ui/error-message';
+import CouponLoader from '@/components/ui/loaders/coupon-loader';
+import NotFound from '@/components/ui/not-found';
+import { useShops } from '@/framework/shop';
 import { SHOPS_LIMIT } from '@/lib/constants';
+import rangeMap from '@/lib/range-map';
+import type { NextPageWithLayout } from '@/types';
+import { useTranslation } from 'next-i18next';
 export { getStaticProps } from '@/framework/shops-page.ssr';
 
 const ShopsPage: NextPageWithLayout = () => {
@@ -17,12 +17,13 @@ const ShopsPage: NextPageWithLayout = () => {
   const { shops, isLoading, isLoadingMore, hasMore, loadMore, error } =
     useShops({
       limit,
-      is_active: 1,
+      is_active: true,
     });
+  console.log(shops);
   if (error) return <ErrorMessage message={error.message} />;
   if (!isLoading && !shops.length) {
     return (
-      <div className="min-h-full px-4 pt-6 pb-8 bg-gray-100 lg:p-8">
+      <div className="min-h-full bg-gray-100 px-4 pt-6 pb-8 lg:p-8">
         <NotFound text="text-no-shops" />
       </div>
     );
@@ -30,7 +31,7 @@ const ShopsPage: NextPageWithLayout = () => {
 
   return (
     <div className="min-h-screen bg-light ">
-      <div className="flex flex-col w-full max-w-6xl p-8 mx-auto pt-14">
+      <div className="mx-auto flex w-full max-w-6xl flex-col p-8 pt-14">
         <h3 className="mb-8 text-2xl font-bold text-heading">
           {t('text-all-shops')}
         </h3>
@@ -43,11 +44,11 @@ const ShopsPage: NextPageWithLayout = () => {
               ))}
             </>
           ) : (
-            shops.map((shop) => <ShopCard shop={shop} key={shop.id} />)
+            shops.map((shop) => <ShopCard shop={shop} key={shop._id} />)
           )}
         </div>
         {hasMore && (
-          <div className="flex items-center justify-center mt-8 lg:mt-12">
+          <div className="mt-8 flex items-center justify-center lg:mt-12">
             <Button onClick={loadMore} loading={isLoadingMore}>
               {t('text-load-more')}
             </Button>
