@@ -22,8 +22,8 @@ function WishlistItem({ product }: { product: Product }) {
   const { removeFromWishlist, isLoading } = useRemoveFromWishlist();
   const productSingleUrl =
     product?.language !== DEFAULT_LANGUAGE
-      ? `${product?.language}/${product?.slug}`
-      : product.slug;
+      ? `${product?.language}/products/${product?.slug}`
+      : `/products/${product?.slug}`;
 
   const { price, basePrice } = usePrice({
     amount: product?.sale_price ? product?.sale_price : product?.price,
@@ -36,6 +36,7 @@ function WishlistItem({ product }: { product: Product }) {
     amount: product?.max_price,
   });
 
+  console.log(product.language);
   const { openModal } = useModalAction();
 
   function handleVariableProduct() {
@@ -139,7 +140,6 @@ const WishlistProducts: React.FC = () => {
 
   if (error) return <ErrorMessage message={error.message} />;
 
-  // loader
   if (!wishlists.length && isLoading) {
     return (
       <div className="flex w-full flex-col">

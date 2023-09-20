@@ -1,8 +1,8 @@
+import { mapPaginatorData } from '@/framework/utils/data-mappers';
 import type { ShopPaginator, ShopQueryOptions } from '@/types';
 import { useInfiniteQuery } from 'react-query';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
-import { mapPaginatorData } from '@/framework/utils/data-mappers';
 
 export function useShops(options?: Partial<ShopQueryOptions>) {
   const {
@@ -26,7 +26,7 @@ export function useShops(options?: Partial<ShopQueryOptions>) {
   function handleLoadMore() {
     fetchNextPage();
   }
-
+  console.log(options);
   return {
     shops: data?.pages?.flatMap((page) => page.data) ?? [],
     paginatorInfo: Array.isArray(data?.pages)

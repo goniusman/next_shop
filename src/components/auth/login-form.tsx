@@ -1,20 +1,20 @@
-import { signIn } from 'next-auth/react';
-import Logo from '@/components/ui/logo';
+import { AnonymousIcon } from '@/components/icons/anonymous-icon';
+import { GoogleIcon } from '@/components/icons/google';
+import { MobileIcon } from '@/components/icons/mobile-icon';
 import Alert from '@/components/ui/alert';
+import Button from '@/components/ui/button';
+import { Form } from '@/components/ui/forms/form';
 import Input from '@/components/ui/forms/input';
 import PasswordInput from '@/components/ui/forms/password-input';
-import Button from '@/components/ui/button';
-import { useTranslation } from 'next-i18next';
-import * as yup from 'yup';
-import { GoogleIcon } from '@/components/icons/google';
+import Logo from '@/components/ui/logo';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { MobileIcon } from '@/components/icons/mobile-icon';
-import { Form } from '@/components/ui/forms/form';
+import { Routes } from '@/config/routes';
 import { useLogin } from '@/framework/user';
 import type { LoginUserInput } from '@/types';
-import { AnonymousIcon } from '@/components/icons/anonymous-icon';
+import { signIn } from 'next-auth/react';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { Routes } from '@/config/routes';
+import * as yup from 'yup';
 
 const loginFormSchema = yup.object().shape({
   email: yup
@@ -36,7 +36,7 @@ function LoginForm() {
       password,
     });
   }
-
+  // console.log(serverError);
   return (
     <>
       <Alert

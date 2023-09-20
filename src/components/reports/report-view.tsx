@@ -1,15 +1,15 @@
 import ErrorMessage from '@/components/ui/error-message';
-import { useTranslation } from 'next-i18next';
 import NotFound from '@/components/ui/not-found';
+import { Table } from '@/components/ui/table';
 import { useMyReports } from '@/framework/report';
 import { useIsRTL } from '@/lib/locals';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { Table } from '@/components/ui/table';
-import TableLoader from '../ui/loaders/table-loader';
+import utc from 'dayjs/plugin/utc';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import TableLoader from '../ui/loaders/table-loader';
 
 type AlignType = 'left' | 'right' | 'center';
 
@@ -24,7 +24,7 @@ const MyReports: React.FC = () => {
     });
 
   if (error) return <ErrorMessage message={error.message} />;
-
+  // console.log(reports);
   const orderTableColumns = [
     {
       title: t('text-id'),
@@ -49,7 +49,10 @@ const MyReports: React.FC = () => {
       align: 'center' as AlignType,
       className: '!text-sm',
       width: 160,
-      render: (date: string) => {
+      render: (date: any) => {
+        date = new Date(date);
+        // console.log(date);
+        // date = '7/26/2023';
         dayjs.extend(relativeTime);
         dayjs.extend(utc);
         dayjs.extend(timezone);

@@ -1,13 +1,13 @@
 import Button from '@/components/ui/button';
 import Card from '@/components/ui/cards/card';
 import FileInput from '@/components/ui/forms/file-input';
+import { Form } from '@/components/ui/forms/form';
 import Input from '@/components/ui/forms/input';
 import TextArea from '@/components/ui/forms/text-area';
-import { useTranslation } from 'next-i18next';
-import pick from 'lodash/pick';
-import { Form } from '@/components/ui/forms/form';
 import { useUpdateUser } from '@/framework/user';
 import type { UpdateUserInput, User } from '@/types';
+import pick from 'lodash/pick';
+import { useTranslation } from 'next-i18next';
 
 const ProfileForm = ({ user }: { user: User }) => {
   const { t } = useTranslation('common');
@@ -17,7 +17,7 @@ const ProfileForm = ({ user }: { user: User }) => {
     if (!user) {
       return false;
     }
-    console.log(values);
+    // console.log(values);
     updateProfile({
       id: user._id,
       name: values.name,

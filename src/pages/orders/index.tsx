@@ -8,6 +8,8 @@ import ErrorMessage from '@/components/ui/error-message';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
 import NotFound from '@/components/ui/not-found';
 import { useOrders } from '@/framework/order';
+import { useUser } from '@/framework/user';
+
 import isEmpty from 'lodash/isEmpty';
 export { getStaticProps } from '@/framework/general.ssr';
 
@@ -20,8 +22,9 @@ function NoOrderFound() {
 }
 
 export default function OrdersPage() {
+  const { me } = useUser();
   const { orders, isLoading, error, hasMore, loadMore, isLoadingMore } =
-    useOrders();
+    useOrders({ customer_id: me?._id });
   const [selectedOrder] = useSelectedOrder();
 
   const ordersItem: any = orders;

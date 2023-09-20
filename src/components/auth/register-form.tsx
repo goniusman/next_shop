@@ -1,14 +1,15 @@
-import { useRouter } from 'next/router';
-import Logo from '@/components/ui/logo';
+import Button from '@/components/ui/button';
+import { Form } from '@/components/ui/forms/form';
 import Input from '@/components/ui/forms/input';
 import PasswordInput from '@/components/ui/forms/password-input';
-import Button from '@/components/ui/button';
-import { useTranslation } from 'next-i18next';
+import Logo from '@/components/ui/logo';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { Form } from '@/components/ui/forms/form';
-import type { RegisterUserInput } from '@/types';
-import * as yup from 'yup';
 import { useRegister } from '@/framework/user';
+import type { RegisterUserInput } from '@/types';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import * as yup from 'yup';
+import Alert from '../ui/alert';
 
 const registerFormSchema = yup.object().shape({
   name: yup.string().required('error-name-required'),
@@ -17,25 +18,33 @@ const registerFormSchema = yup.object().shape({
     .email('error-email-format')
     .required('error-email-required'),
   password: yup.string().required('error-password-required'),
-  permissions: yup.array().default(["customer"]),
+  permissions: yup.array().default(['customer']),
 });
 
 function RegisterForm() {
   const { t } = useTranslation('common');
   const { openModal } = useModalAction();
-  const { mutate, isLoading, formError } = useRegister();
+  const { mutate, isLoading, formError, setFormError } = useRegister();
 
   function onSubmit({ name, email, password, permissions }: RegisterUserInput) {
     mutate({
       name,
       email,
       password,
-      permissions
+      permissions,
     });
   }
 
   return (
     <>
+      <Alert
+        variant="error"
+        message={formError ? formError : null}
+        className="mb-6"
+        closeable={true}
+        onClose={() => setFormError(null)}
+      />
+
       <Form<RegisterUserInput>
         onSubmit={onSubmit}
         validationSchema={registerFormSchema}

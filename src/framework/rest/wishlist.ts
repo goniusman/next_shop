@@ -1,6 +1,7 @@
 import type { WishlistPaginator, WishlistQueryOptions } from '@/types';
 import axios from 'axios';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import {
   useInfiniteQuery,
   useMutation,
@@ -11,7 +12,6 @@ import { toast } from 'react-toastify';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
 import { mapPaginatorData } from './utils/data-mappers';
-import { useRouter } from 'next/router';
 
 export function useToggleWishlist(product_id: string) {
   const queryClient = useQueryClient();
@@ -24,7 +24,7 @@ export function useToggleWishlist(product_id: string) {
     onSuccess: (data) => {
       queryClient.setQueryData(
         [`${API_ENDPOINTS.WISHLIST}/in_wishlist`, product_id],
-        (old:any) => !old
+        (old: any) => !old
       );
     },
     onError: (error) => {
@@ -60,7 +60,6 @@ export function useRemoveFromWishlist() {
 }
 
 export function useWishlist(options?: WishlistQueryOptions) {
-  
   const { locale } = useRouter();
 
   const formattedOptions = {
@@ -88,8 +87,11 @@ export function useWishlist(options?: WishlistQueryOptions) {
   function handleLoadMore() {
     fetchNextPage();
   }
+
+  // console.log(data?.pages[0]?.data[0]?.product_id);
+
   return {
-    wishlists: data?.pages?.flatMap((page) => page.data) ?? [],
+    wishlists: data?.pages[0]?.data[0]?.products_id ?? [],
     paginatorInfo: Array.isArray(data?.pages)
       ? mapPaginatorData(data?.pages[data.pages.length - 1])
       : null,

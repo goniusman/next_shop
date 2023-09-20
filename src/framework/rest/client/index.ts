@@ -178,24 +178,24 @@ class Client {
       ),
   };
   addresses = {
-    // all: ({ rating, ...params }: ReviewQueryOptions) =>
-    //   HttpClient.get<ReviewPaginator>(API_ENDPOINTS.USERS_ADDRESS, {
-    //     searchJoin: 'and',
-    //     with: 'user',
-    //     ...params,
-    //     search: HttpClient.formatSearchParams({
-    //       rating,
-    //     }),
-    //   }),
-    // get: ({ id }: { id: string }) =>
-    //   HttpClient.get<Review>(`${API_ENDPOINTS.USERS_ADDRESS}/${id}`),
-    // create: (input: CreateReviewInput) =>
-    //   HttpClient.post<ReviewResponse>(API_ENDPOINTS.USERS_ADDRESS, input),
-    // update: (input: UpdateReviewInput) =>
-    //   HttpClient.put<ReviewResponse>(
-    //     `${API_ENDPOINTS.USERS_ADDRESS}/${input.id}`,
-    //     input
-    //   ),
+    all: ({ rating, ...params }: ReviewQueryOptions) =>
+      HttpClient.get<ReviewPaginator>(API_ENDPOINTS.USERS_ADDRESS, {
+        searchJoin: 'and',
+        with: 'user',
+        ...params,
+        search: HttpClient.formatSearchParams({
+          rating,
+        }),
+      }),
+    get: ({ id }: { id: string }) =>
+      HttpClient.get<Review>(`${API_ENDPOINTS.USERS_ADDRESS}/${id}`),
+    create: (input: CreateReviewInput) =>
+      HttpClient.post<ReviewResponse>(API_ENDPOINTS.USERS_ADDRESS, input),
+    update: (input: UpdateReviewInput) =>
+      HttpClient.put<ReviewResponse>(
+        `${API_ENDPOINTS.USERS_ADDRESS}/${input.id}`,
+        input
+      ),
   };
   categories = {
     all: ({ type, ...params }: Partial<CategoryQueryOptions>) =>
@@ -344,7 +344,7 @@ class Client {
       ),
     logout: () => HttpClient.post<boolean>(API_ENDPOINTS.USERS_LOGOUT, {}),
     deleteAddress: ({ id }: { id: string }) =>
-      HttpClient.delete<boolean>(`${API_ENDPOINTS.USERS_ADDRESS}/${id}`),
+      HttpClient.delete<any>(`${API_ENDPOINTS.USERS_ADDRESS_DELETE}/${id}`),
     subscribe: (input: { email: string }) =>
       HttpClient.post<any>(API_ENDPOINTS.USERS_SUBSCRIBE_TO_NEWSLETTER, input),
     contactUs: (input: CreateContactUsInput) =>

@@ -19,7 +19,7 @@ const ShopsPage: NextPageWithLayout = () => {
       limit,
       is_active: true,
     });
-  console.log(shops);
+  // console.log(shops);
   if (error) return <ErrorMessage message={error.message} />;
   if (!isLoading && !shops.length) {
     return (

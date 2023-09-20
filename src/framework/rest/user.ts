@@ -1,5 +1,22 @@
+import {
+  initialState,
+  updateFormState,
+} from '@/components/auth/forgot-password';
+import { initialOtpState, optAtom } from '@/components/otp/atom';
 import { useModalAction } from '@/components/ui/modal/modal.context';
+import { useToken } from '@/lib/hooks/use-token';
+import { authorizationAtom } from '@/store/authorization-atom';
+import { clearCheckoutAtom } from '@/store/checkout';
+import type {
+  ChangePasswordUserInput,
+  OtpLoginInputType,
+  RegisterUserInput,
+} from '@/types';
+import { useAtom } from 'jotai';
+import { useStateMachine } from 'little-state-machine';
+import { signOut as socialLoginSignOut } from 'next-auth/react';
 import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 import {
   QueryClient,
   useMutation,
@@ -8,24 +25,7 @@ import {
 } from 'react-query';
 import { toast } from 'react-toastify';
 import client from './client';
-import { authorizationAtom } from '@/store/authorization-atom';
-import { useAtom } from 'jotai';
-import { signOut as socialLoginSignOut } from 'next-auth/react';
-import { useToken } from '@/lib/hooks/use-token';
 import { API_ENDPOINTS } from './client/api-endpoints';
-import { useState } from 'react';
-import type {
-  RegisterUserInput,
-  ChangePasswordUserInput,
-  OtpLoginInputType,
-} from '@/types';
-import { initialOtpState, optAtom } from '@/components/otp/atom';
-import { useStateMachine } from 'little-state-machine';
-import {
-  initialState,
-  updateFormState,
-} from '@/components/auth/forgot-password';
-import { clearCheckoutAtom } from '@/store/checkout';
 
 export function useUser() {
   const [isAuthorized] = useAtom(authorizationAtom);
@@ -50,16 +50,19 @@ export const useDeleteAddress = () => {
   const queryClient = useQueryClient();
   return useMutation(client.users.deleteAddress, {
     onSuccess: (data) => {
+      // console.log(data);
       if (data) {
         toast.success('successfully-address-deleted');
         closeModal();
         return;
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       const {
         response: { data },
       }: any = error ?? {};
+
+      console.log(error.response);
 
       toast.error(data?.message);
     },
@@ -116,6 +119,7 @@ export function useLogin() {
 
   const { mutate, isLoading } = useMutation(client.users.login, {
     onSuccess: (data) => {
+      console.log(data);
       if (!data.token) {
         setServerError('error-credential-wrong');
         return;
@@ -124,8 +128,9 @@ export function useLogin() {
       setAuthorized(true);
       closeModal();
     },
-    onError: (error: Error) => {
-      console.log(error.message);
+    onError: (error: any) => {
+      setServerError(error?.response?.data?.message);
+      // console.log(error.response);
     },
   });
 
@@ -179,8 +184,9 @@ export function useSendOtpCode({
         ...(verifyOnly && { step: 'OtpForm' }),
       });
     },
-    onError: (error: Error) => {
-      console.log(error.message);
+    onError: (error: any) => {
+      setServerError(error.response.data.message);
+      // console.log(error.message);
     },
   });
 
@@ -269,7 +275,7 @@ export function useRegister() {
 
   const { mutate, isLoading } = useMutation(client.users.register, {
     onSuccess: (data) => {
-      // console.log(data);
+      console.log(data);
       if (data?.token && data?.permissions?.length) {
         setToken(data?.token);
         setAuthorized(true);
@@ -277,6 +283,7 @@ export function useRegister() {
         return;
       }
       if (!data.token) {
+        // setFormError('There are permissions problem. please contact support');
         toast.error(t('error-credential-wrong'));
       }
     },
@@ -285,7 +292,9 @@ export function useRegister() {
         response: { data },
       }: any = error ?? {};
 
-      setFormError(data);
+      setFormError(data?.message);
+
+      // console.log(data?.message);
     },
   });
 
@@ -339,7 +348,8 @@ export function useChangePassword() {
       const {
         response: { data },
       }: any = error ?? {};
-      setFormError(data);
+      setFormError(data?.message);
+      // console.log(data);
     },
   });
 

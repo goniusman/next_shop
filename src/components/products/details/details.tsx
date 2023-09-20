@@ -1,31 +1,31 @@
-import {HeartFillIcon} from '@/components/icons/heart-fill';
-import {HeartOutlineIcon} from '@/components/icons/heart-outline';
-import {StarIcon} from '@/components/icons/star-icon';
-import {AddToCart} from '@/components/products/add-to-cart/add-to-cart';
+import { HeartFillIcon } from '@/components/icons/heart-fill';
+import { HeartOutlineIcon } from '@/components/icons/heart-outline';
+import { StarIcon } from '@/components/icons/star-icon';
+import { AddToCart } from '@/components/products/add-to-cart/add-to-cart';
 import BackButton from '@/components/ui/back-button';
 import Spinner from '@/components/ui/loaders/spinner/spinner';
-import {useModalAction} from '@/components/ui/modal/modal.context';
-import {ThumbsCarousel} from '@/components/ui/thumb-carousel';
+import { useModalAction } from '@/components/ui/modal/modal.context';
+import { ThumbsCarousel } from '@/components/ui/thumb-carousel';
 import Truncate from '@/components/ui/truncate';
-import {Routes} from '@/config/routes';
-import {useUser} from '@/framework/user';
-import {useInWishlist,useToggleWishlist} from '@/framework/wishlist';
-import {displayImage} from '@/lib/display-product-preview-images';
-import {getVariations} from '@/lib/get-variations';
-import {isVariationSelected} from '@/lib/is-variation-selected';
+import { Routes } from '@/config/routes';
+import { useUser } from '@/framework/user';
+import { useInWishlist, useToggleWishlist } from '@/framework/wishlist';
+import { displayImage } from '@/lib/display-product-preview-images';
+import { getVariations } from '@/lib/get-variations';
+import { isVariationSelected } from '@/lib/is-variation-selected';
 import usePrice from '@/lib/use-price';
-import {stickyShortDetailsAtom} from '@/store/sticky-short-details-atom';
-import type {Product} from '@/types';
+import { stickyShortDetailsAtom } from '@/store/sticky-short-details-atom';
+import type { Product } from '@/types';
 import classNames from 'classnames';
-import {useAtom} from 'jotai';
+import { useAtom } from 'jotai';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import {useTranslation} from 'next-i18next';
-import {useRouter} from 'next/router';
-import {useEffect,useMemo,useRef} from 'react';
-import {Element,scroller} from 'react-scroll';
-import {useIntersection} from 'react-use';
-import {useAttributes} from './attributes.context';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { useEffect, useMemo, useRef } from 'react';
+import { Element, scroller } from 'react-scroll';
+import { useIntersection } from 'react-use';
+import { useAttributes } from './attributes.context';
 import CategoryBadges from './category-badges';
 import VariationGroups from './variation-groups';
 import VariationPrice from './variation-price';
@@ -43,6 +43,8 @@ function FavoriteButton({
     enabled: isAuthorized,
     product_id: productId,
   });
+
+  // console.log(productId);
 
   const { openModal } = useModalAction();
   function toggle() {
@@ -220,7 +222,7 @@ const Details: React.FC<Props> = ({
 
               <span>
                 <FavoriteButton
-                  productId={id}
+                  productId={_id}
                   className={classNames({ 'mr-1': isModal })}
                 />
               </span>

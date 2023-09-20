@@ -1,36 +1,37 @@
+import { useModalAction } from '@/components/ui/modal/modal.context';
+import { Routes } from '@/config/routes';
+import { mapPaginatorData } from '@/framework/utils/data-mappers';
+import { verifiedResponseAtom } from '@/store/checkout';
 import {
+  CreateOrderInput,
+  CreateRefundInput,
   DownloadableFilePaginator,
   Order,
   OrderPaginator,
   OrderQueryOptions,
   OrderStatusPaginator,
   QueryOptions,
-  CreateOrderInput,
-  CreateRefundInput
 } from '@/types';
+import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 import {
   useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
 } from 'react-query';
-import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import { API_ENDPOINTS } from './client/api-endpoints';
 import client from './client';
-import { useAtom } from 'jotai';
-import { verifiedResponseAtom } from '@/store/checkout';
-import { useRouter } from 'next/router';
-import { Routes } from '@/config/routes';
-import { mapPaginatorData } from '@/framework/utils/data-mappers';
+import { API_ENDPOINTS } from './client/api-endpoints';
+import { useUser } from './user';
 
 export function useOrders(options?: Partial<OrderQueryOptions>) {
   const { locale } = useRouter();
-  
+
   const formattedOptions = {
     ...options,
-    // language: locale
+    language: locale,
   };
 
   const {
@@ -82,9 +83,11 @@ export function useOrder({ tracking_number }: { tracking_number: string }) {
   };
 }
 
-export function useOrderStatuses(options: Pick<QueryOptions, 'limit' | 'language'>) {
+export function useOrderStatuses(
+  options: Pick<QueryOptions, 'limit' | 'language'>
+) {
   const { locale } = useRouter();
-  
+
   const formattedOptions = {
     ...options,
     // language: locale
@@ -125,11 +128,12 @@ export function useOrderStatuses(options: Pick<QueryOptions, 'limit' | 'language
 }
 
 export function useRefunds(options: Pick<QueryOptions, 'limit'>) {
-
   const { locale } = useRouter();
-  
+  const { me } = useUser();
+
   const formattedOptions = {
     ...options,
+    user_id: me?._id,
     // language: locale
   };
 
@@ -153,9 +157,9 @@ export function useRefunds(options: Pick<QueryOptions, 'limit'>) {
   function handleLoadMore() {
     fetchNextPage();
   }
-
+  // console.log(data);
   return {
-    refunds: data?.pages?.flatMap((page) => page.data) ?? [],
+    refunds: data?.pages[0] ?? [],
     paginatorInfo: Array.isArray(data?.pages)
       ? mapPaginatorData(data?.pages[data.pages.length - 1])
       : null,
@@ -170,9 +174,8 @@ export function useRefunds(options: Pick<QueryOptions, 'limit'>) {
 export const useDownloadableProducts = (
   options: Pick<QueryOptions, 'limit'>
 ) => {
-
   const { locale } = useRouter();
-  
+
   const formattedOptions = {
     ...options,
     // language: locale
@@ -272,7 +275,7 @@ export function useCreateOrder() {
   function formatOrderInput(input: CreateOrderInput) {
     const formattedInputs = {
       ...input,
-      language: locale
+      language: locale,
     };
     createOrder(formattedInputs);
   }

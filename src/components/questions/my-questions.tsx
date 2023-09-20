@@ -1,19 +1,19 @@
-import ErrorMessage from '@/components/ui/error-message';
-import { useTranslation } from 'next-i18next';
-import Button from '@/components/ui/button';
-import NotFound from '@/components/ui/not-found';
-import type { Question } from '@/types';
-import rangeMap from '@/lib/range-map';
-import { useMyQuestions } from '@/framework/question';
-import dayjs from 'dayjs';
-import { LikeIcon } from '@/components/icons/like-icon';
 import { DislikeIcon } from '@/components/icons/dislike-icon';
-import QuestionLoader from '@/components/ui/loaders/question-loader';
-import Link from '@/components/ui/link';
+import { LikeIcon } from '@/components/icons/like-icon';
+import Button from '@/components/ui/button';
+import ErrorMessage from '@/components/ui/error-message';
 import { Image } from '@/components/ui/image';
+import Link from '@/components/ui/link';
+import QuestionLoader from '@/components/ui/loaders/question-loader';
+import NotFound from '@/components/ui/not-found';
 import { Routes } from '@/config/routes';
+import { useMyQuestions } from '@/framework/question';
 import { productPlaceholder } from '@/lib/placeholders';
+import rangeMap from '@/lib/range-map';
 import usePrice from '@/lib/use-price';
+import type { Question } from '@/types';
+import dayjs from 'dayjs';
+import { useTranslation } from 'next-i18next';
 
 function QuestionItem({ question }: { question: Question }) {
   const {
@@ -42,7 +42,7 @@ function QuestionItem({ question }: { question: Question }) {
       <div className="mb-5 flex items-center space-x-4">
         <div className="relative h-10 w-10 overflow-hidden rounded border border-gray-200">
           <Image
-            src={product.image?.original ?? productPlaceholder}
+            src={product?.image?.original ?? productPlaceholder}
             layout="fill"
             alt={product?.name}
           />
@@ -171,7 +171,7 @@ const MyQuestions: React.FC = () => {
           </h1>
         </div>
         <div>
-          {questions?.map((item:any) => (
+          {questions?.map((item: any) => (
             <QuestionItem key={item.id} question={item} />
           ))}
         </div>

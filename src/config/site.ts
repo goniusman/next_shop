@@ -72,6 +72,10 @@ export const siteSettings = {
       label: 'profile-sidebar-my-reports',
     },
     {
+      href: Routes.cards,
+      label: 'profile-sidebar-my-cards',
+    },
+    {
       href: Routes.help,
       label: 'profile-sidebar-help',
     },

@@ -139,6 +139,7 @@ export interface CouponQueryOptions extends QueryOptions {
 }
 
 export interface OrderQueryOptions extends QueryOptions {
+  customer_id?: any;
   name: string;
   orderBy: string;
 }
@@ -669,7 +670,8 @@ export interface Wishlist {
   id: string;
   _id: any;
   product: Product;
-  product_id: string;
+  product_id: any;
+  products_id: any;
   user: User[];
   user_id: string;
 }

@@ -1,23 +1,26 @@
-import { Table } from '@/components/ui/table';
-import usePrice from '@/lib/use-price';
-import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@/lib/locals';
-import { useMemo } from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import { Eye } from '@/components/icons/eye-icon';
 import Badge from '@/components/ui/badge';
 import Card from '@/components/ui/cards/card';
-import { Eye } from '@/components/icons/eye-icon';
-import Link from '@/components/ui/link';
-import { Routes } from '@/config/routes';
 import ErrorMessage from '@/components/ui/error-message';
+import Link from '@/components/ui/link';
+import { Table } from '@/components/ui/table';
+import { Routes } from '@/config/routes';
 import { useRefunds } from '@/framework/order';
+import { useUser } from '@/framework/user';
+import { useIsRTL } from '@/lib/locals';
+import usePrice from '@/lib/use-price';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import { useTranslation } from 'next-i18next';
+import { useMemo } from 'react';
+
+
 type AlignType = 'left' | 'right' | 'center';
 const RenderStatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const { t } = useTranslation('common');
-  switch (status.toLowerCase()) {
+  switch (status?.toLowerCase()) {
     case 'approved':
       return <Badge text={t('text-approved')} color="bg-accent" />;
     case 'rejected':
@@ -32,10 +35,13 @@ const RenderStatusBadge: React.FC<{ status: string }> = ({ status }) => {
 const RefundView: React.FC = () => {
   const { t } = useTranslation('common');
   const { alignLeft, alignRight } = useIsRTL();
+
   const { error, refunds } = useRefunds({
     limit: 10,
+
   });
-  let err:any = error;
+
+  let err: any = error;
   const refundTableColumns = useMemo(
     () => [
       {
@@ -79,19 +85,19 @@ const RefundView: React.FC = () => {
         className: '!text-sm',
         width: 160,
         render: function renderTrackingNumber(pivot: any) {
-          return <p>{pivot?.order?.tracking_number}</p>;
+          return <p>{pivot?.order_id?.tracking_number || pivot}</p>;
         },
       },
       {
         title: t('text-amount'),
-        dataIndex: 'amount',
+        dataIndex: '',
         key: 'amount',
         align: alignRight as AlignType,
         className: '!text-sm',
         width: 150,
-        render: function RenderPrice(amount: any) {
+        render: function RenderPrice(pivot: any) {
           const { price } = usePrice({
-            amount: amount,
+            amount: pivot?.order_id?.amount,
           });
           return <p>{price}</p>;
         },
@@ -116,7 +122,7 @@ const RefundView: React.FC = () => {
       },
       {
         title: t('text-details'),
-        dataIndex: 'order',
+        dataIndex: 'order_id',
         key: 'order',
         align: 'center' as AlignType,
         className: '!text-sm',
@@ -134,6 +140,7 @@ const RefundView: React.FC = () => {
     ],
     [alignLeft, alignRight, t]
   );
+
   if (err) return <ErrorMessage message={err?.message} />;
   return (
     <Card className="min-h-screen w-full self-stretch overflow-hidden lg:min-h-0">
@@ -143,7 +150,7 @@ const RefundView: React.FC = () => {
       <Table
         columns={refundTableColumns}
         data={refunds}
-        rowKey={(record: any) => record.created_at}
+        rowKey={(record: any) => record?.created_at}
         className="orderDetailsTable w-full border border-gray-200"
         scroll={{ x: 500, y: 700 }}
       />

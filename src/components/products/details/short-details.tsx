@@ -1,20 +1,21 @@
-import { useRouter } from 'next/router';
-import Image from 'next/image';
-import cn from 'classnames';
 import { AddToCart } from '@/components/products/add-to-cart/add-to-cart';
-import usePrice from '@/lib/use-price';
-import { getVariations } from '@/lib/get-variations';
-import isEqual from 'lodash/isEqual';
-import isEmpty from 'lodash/isEmpty';
-import VariationPrice from './variation-price';
-import { useTranslation } from 'next-i18next';
-import { Routes } from '@/config/routes';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import VariationGroups from './variation-groups';
-import type { Product } from '@/types';
+import { Routes } from '@/config/routes';
+import { getVariations } from '@/lib/get-variations';
 import { isVariationSelected } from '@/lib/is-variation-selected';
+import { productPlaceholder } from '@/lib/placeholders';
+import usePrice from '@/lib/use-price';
+import type { Product } from '@/types';
+import cn from 'classnames';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
+import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { useAttributes } from './attributes.context';
+import VariationGroups from './variation-groups';
+import VariationPrice from './variation-price';
 
 interface ShortDetailsProps {
   product: Product;
@@ -78,7 +79,11 @@ const ShortDetails: React.FC<ShortDetailsProps> = ({ product, isSticky }) => {
           )}
         >
           <Image
-            src={selectedVariation?.image?.original! ?? image?.original}
+            src={
+              selectedVariation?.image?.original! ??
+              image?.original ??
+              productPlaceholder
+            }
             alt={name}
             layout="fill"
             objectFit="contain"

@@ -99,7 +99,7 @@ export default function ProductsGrid({
 }: ProductsGridProps) {
   const { products, loadMore, isLoadingMore, isLoading, hasMore, error } =
     useProducts(variables);
-
+  console.log(products);
   const productsItem: any = products;
   return (
     <Grid

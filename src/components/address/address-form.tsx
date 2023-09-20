@@ -1,16 +1,17 @@
 import Button from '@/components/ui/button';
+import { Form } from '@/components/ui/forms/form';
 import Input from '@/components/ui/forms/input';
 import Label from '@/components/ui/forms/label';
 import Radio from '@/components/ui/forms/radio/radio';
 import TextArea from '@/components/ui/forms/text-area';
+import { useModalState } from '@/components/ui/modal/modal.context';
+import { useUpdateUser } from '@/framework/user';
+import { AddressType } from '@/framework/utils/constants';
 import { useTranslation } from 'next-i18next';
 import * as yup from 'yup';
-import { useModalState } from '@/components/ui/modal/modal.context';
-import { Form } from '@/components/ui/forms/form';
-import { AddressType } from '@/framework/utils/constants';
-import { useUpdateUser } from '@/framework/user';
 
 type FormValues = {
+  _id: any;
   title: string;
   type: AddressType;
   address: {
@@ -145,8 +146,8 @@ export default function CreateOrUpdateAddressForm() {
 
   function onSubmit(values: FormValues) {
     const formattedInput = {
-      id: address?.id,
-      // customer_id: customerId,
+      id: Math.floor(Math.random() * 100) + Date.now(),
+      customer: customerId,
       title: values.title,
       type: values.type,
       address: {
@@ -157,7 +158,11 @@ export default function CreateOrUpdateAddressForm() {
       id: customerId,
       address: [formattedInput],
     });
+
+    // console.log(customerId);
+    // console.log(formattedInput);
   }
+
   return (
     <div className="min-h-screen bg-light p-5 sm:p-8 md:min-h-0 md:rounded-xl">
       <h1 className="mb-4 text-center text-lg font-semibold text-heading sm:mb-6">

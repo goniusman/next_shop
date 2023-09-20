@@ -14,7 +14,7 @@ const OrderItemList = (_: any, record: any) => {
   const { price } = usePrice({
     amount: record?.unit_price,
   });
-  console.log(record);
+  // console.log(record);
   let name = record?.product_id?.name;
   if (record?.pivot?.variation_option_id) {
     const variationTitle = record?.variation_options?.find(

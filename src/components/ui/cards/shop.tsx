@@ -1,11 +1,11 @@
-import { Image } from '@/components/ui/image';
 import { MapPin } from '@/components/icons/map-pin';
-import { useTranslation } from 'next-i18next';
-import { formatAddress } from '@/lib/format-address';
-import { Routes } from '@/config/routes';
+import { Image } from '@/components/ui/image';
 import Link from '@/components/ui/link';
-import isEmpty from 'lodash/isEmpty';
+import { Routes } from '@/config/routes';
+import { formatAddress } from '@/lib/format-address';
 import { productPlaceholder } from '@/lib/placeholders';
+import isEmpty from 'lodash/isEmpty';
+import { useTranslation } from 'next-i18next';
 
 type ShopCardProps = {
   shop: any;
@@ -15,7 +15,7 @@ const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
   const { t } = useTranslation();
 
   const isNew = false;
-
+  console.log(shop);
   return (
     <Link href={Routes.shop(shop.slug)}>
       <div className="relative flex cursor-pointer items-center rounded border border-gray-200 p-5">

@@ -1,15 +1,15 @@
-import { useTranslation } from 'next-i18next';
 import QuestionCard from '@/components/questions/question-card';
-import Pagination from '@/components/ui/pagination';
-import { useEffect, useState } from 'react';
-import { useQuestions } from '@/framework/product';
-import Search from '@/components/ui/search/search';
+import Spinner from '@/components/ui/loaders/spinner/spinner';
 import { useModalAction } from '@/components/ui/modal/modal.context';
-import { useRouter } from 'next/router';
+import Pagination from '@/components/ui/pagination';
+import Search from '@/components/ui/search/search';
+import { useQuestions } from '@/framework/product';
 import { useUser } from '@/framework/user';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
-import Spinner from '@/components/ui/loaders/spinner/spinner';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 type ProductQuestionsProps = {
   className?: any;
@@ -34,6 +34,9 @@ const ProductQuestions: React.FC<ProductQuestionsProps> = ({
     page,
     ...(!isEmpty(query?.text) && { question: query.text?.toString() }),
   });
+
+  // console.log(productId);
+
   useEffect(() => {
     setPage(1);
   }, [query.text]);
@@ -105,7 +108,7 @@ const ProductQuestions: React.FC<ProductQuestionsProps> = ({
               'mx-auto max-w-screen-xl': boxedLayout,
             })}
           >
-            {questions?.map((question:any) => (
+            {questions?.map((question: any) => (
               <QuestionCard
                 key={`question-no-${question.id}`}
                 question={question}
