@@ -66,7 +66,7 @@ export class HttpClient {
       .filter(([, value]) => Boolean(value))
       .map(([k, v]) =>
         ['categories', 'tags', 'author', 'manufacturer'].includes(k)
-          ? `${k}.slug:${v}`
+          ? `${k}:${v}` // `${k}.slug:${v}`
           : `${k}:${v}`
       )
       .join(';');

@@ -1,3 +1,6 @@
+import { useModalAction } from '@/components/ui/modal/modal.context';
+import { mapPaginatorData } from '@/framework/utils/data-mappers';
+import { formatProductsArgs } from '@/framework/utils/format-products-args';
 import type {
   PopularProductQueryOptions,
   Product,
@@ -5,22 +8,18 @@ import type {
   ProductQueryOptions,
   QuestionPaginator,
   QuestionQueryOptions,
-  GetParams,
 } from '@/types';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import {
   useInfiniteQuery,
   useMutation,
   useQuery,
   useQueryClient,
 } from 'react-query';
+import { toast } from 'react-toastify';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
-import { mapPaginatorData } from '@/framework/utils/data-mappers';
-import { formatProductsArgs } from '@/framework/utils/format-products-args';
-import { useTranslation } from 'next-i18next';
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 
 export function useProducts(options?: Partial<ProductQueryOptions>) {
   const { locale } = useRouter();
@@ -29,7 +28,7 @@ export function useProducts(options?: Partial<ProductQueryOptions>) {
     ...formatProductsArgs(options),
     language: locale,
   };
-
+  // console.log(formattedOptions);
   const {
     data,
     isLoading,

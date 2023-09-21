@@ -27,6 +27,7 @@ export interface HomePageProps {
 
 export interface SearchParamOptions {
   type_id?: string;
+  type?: string;
   name: string;
   categories: string;
   tags: string;

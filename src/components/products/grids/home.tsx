@@ -1,6 +1,6 @@
-import { useProducts } from '@/framework/product';
-import { PRODUCTS_PER_PAGE } from '@/framework/client/variables';
 import { Grid } from '@/components/products/grid';
+import { PRODUCTS_PER_PAGE } from '@/framework/client/variables';
+import { useProducts } from '@/framework/product';
 import { useRouter } from 'next/router';
 interface Props {
   className?: string;
@@ -21,7 +21,8 @@ export default function ProductGridHome({
       ...(query.category && { categories: query.category }),
       ...(query.text && { name: query.text }),
     });
-  const productsItem:any = products;
+  // console.log(query);
+  const productsItem: any = products;
   return (
     <Grid
       products={productsItem}
