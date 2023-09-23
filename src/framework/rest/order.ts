@@ -55,9 +55,10 @@ export function useOrders(options?: Partial<OrderQueryOptions>) {
   function handleLoadMore() {
     fetchNextPage();
   }
-
+  // console.log(data);
   return {
-    orders: data?.pages?.flatMap((page) => page.data) ?? [],
+    orders: data?.pages[0]?.data ?? [],
+    // orders: data?.pages?.flatMap((page) => page.data) ?? [],
     paginatorInfo: Array.isArray(data?.pages)
       ? mapPaginatorData(data?.pages[data.pages.length - 1])
       : null,

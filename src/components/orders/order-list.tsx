@@ -29,7 +29,7 @@ export default function OrderList({
       setSelectedOrder(orders[0]);
     }
   }, [orders, selectedOrder, setSelectedOrder]);
-
+  // console.log(orders);
   return (
     <div className="h-[80vh] min-h-[670px] w-full ltr:pr-5 rtl:pl-5 md:w-1/3 md:shrink-0 ltr:lg:pr-8 rtl:lg:pl-8">
       <div className="flex h-full flex-col bg-white pb-5 md:border md:border-border-200">
@@ -40,10 +40,12 @@ export default function OrderList({
           <div className="px-5">
             {orders.map((order: any, index: number) => (
               <OrderCard
-                key={index}
+                key={order.tracking_number}
                 order={order}
                 onClick={() => setSelectedOrder(order)}
-                isActive={order?._id === selectedOrder?._id}
+                isActive={
+                  order?.tracking_number === selectedOrder?.tracking_number
+                }
               />
             ))}
             {hasMore && (

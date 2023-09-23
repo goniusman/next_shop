@@ -11,14 +11,14 @@ type OrderCardProps = {
 
 const OrderCard: React.FC<OrderCardProps> = ({ onClick, order, isActive }) => {
   const { t } = useTranslation('common');
-  const { _id, status, created_at, delivery_time } = order;
+  const { _id, status, createdAt, delivery_time, tracking_number } = order;
   const { price: amount } = usePrice({
     amount: order?.amount,
   });
   const { price: total } = usePrice({
     amount: order?.total,
   });
-
+  // console.log(status);
   return (
     <div
       onClick={onClick}
@@ -31,7 +31,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ onClick, order, isActive }) => {
       <div className="flex items-center justify-between border-b border-border-200 py-3 px-5 md:px-3 lg:px-5 ">
         <span className="flex shrink-0 text-sm font-bold text-heading ltr:mr-4 rtl:ml-4 lg:text-base">
           {t('text-order')}
-          <span className="font-normal">#{_id}</span>
+          <span className="font-normal">#{tracking_number}</span>
         </span>
         <span
           className="max-w-full truncate whitespace-nowrap rounded bg-blue-100 px-3 py-2 text-sm text-blue-500"
@@ -48,7 +48,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ onClick, order, isActive }) => {
           </span>
           <span className="ltr:mr-auto rtl:ml-auto">:</span>
           <span className="ltr:ml-1 rtl:mr-1">
-            {dayjs(created_at).format('MMMM D, YYYY')}
+            {dayjs(createdAt).format('MMMM D, YYYY')}
           </span>
         </p>
         <p className="mb-4 flex w-full items-center justify-between text-sm text-heading last:mb-0">

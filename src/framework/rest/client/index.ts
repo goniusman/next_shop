@@ -76,9 +76,6 @@ import { OTPVerifyResponse } from '@/types';
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
 
-import { AUTH_TOKEN_KEY } from '@/lib/constants';
-import Cookies from 'js-cookie';
-
 class Client {
   products = {
     all: ({
@@ -303,12 +300,7 @@ class Client {
   };
   users = {
     me: () => {
-      const token = Cookies.get(AUTH_TOKEN_KEY);
-
-      const { id: userid } = parseJwt(token);
-      // console.log(user);
-
-      return HttpClient.get<User>(`${API_ENDPOINTS.USERS_ME}/${userid}`);
+      return HttpClient.get<User>(`${API_ENDPOINTS.USERS_ME}`);
     },
     update: (user: UpdateUserInput) =>
       HttpClient.put<User>(`${API_ENDPOINTS.USERS}/${user.id}`, user),

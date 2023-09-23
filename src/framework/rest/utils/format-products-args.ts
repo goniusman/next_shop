@@ -12,7 +12,7 @@ export const formatProductsArgs = (options?: Partial<ProductQueryOptions>) => {
     text,
     ...restOptions
   } = options || {};
-console.log(options);
+  // console.log(options);
   return {
     limit,
     ...(price && { min_price: price as string }),

@@ -70,7 +70,7 @@ function OrderView({ order, language }: any) {
               {t('text-date')}
             </h3>
             <p className="text-sm text-body-dark">
-              {dayjs(order?.created_at).format('MMMM D, YYYY')}
+              {dayjs(order?.createdAt).format('MMMM D, YYYY')}
             </p>
           </div>
           <div className="rounded border border-border-200 py-4 px-5 shadow-sm">

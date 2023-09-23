@@ -15,7 +15,7 @@ const OrderItemList = (_: any, record: any) => {
     amount: record?.unit_price,
   });
   // console.log(record);
-  let name = record?.product_id?.name;
+  let name = record?.product?.name;
   if (record?.pivot?.variation_option_id) {
     const variationTitle = record?.variation_options?.find(
       (vo: any) => vo?.id === record?.pivot?.variation_option_id
@@ -23,10 +23,10 @@ const OrderItemList = (_: any, record: any) => {
     name = `${name} - ${variationTitle}`;
   }
   return (
-    <div className="flex items-center">
+    <div className="flex items-center" key={record?._id}>
       <div className="relative flex h-16 w-16 shrink-0 overflow-hidden rounded">
         <Image
-          src={record?.product_id?.image?.thumbnail ?? productPlaceholder}
+          src={record?.product?.image?.thumbnail ?? productPlaceholder}
           alt={name}
           className="h-full w-full object-cover"
           layout="fill"
@@ -36,9 +36,9 @@ const OrderItemList = (_: any, record: any) => {
       <div className="flex flex-col overflow-hidden ltr:ml-4 rtl:mr-4">
         <div className="mb-1 flex space-x-1 rtl:space-x-reverse">
           <Link
-            href={Routes.product(record?.product_id?.slug)}
+            href={Routes.product(record?.product?.slug)}
             className="inline-block overflow-hidden truncate text-sm text-body transition-colors hover:text-accent hover:underline"
-            locale={record?.product_id?.language}
+            locale={record?.product?.language}
           >
             {name}
           </Link>
@@ -46,7 +46,7 @@ const OrderItemList = (_: any, record: any) => {
             x
           </span>
           <span className="inline-block overflow-hidden truncate text-sm font-semibold text-heading">
-            {record?.product_id?.unit}
+            {record?.product?.unit}
           </span>
         </div>
         <span className="mb-1 inline-block overflow-hidden truncate text-sm font-semibold text-accent">
@@ -71,8 +71,8 @@ export const OrderItems = ({
   const orderTableColumns = [
     {
       title: <span className="ltr:pl-20 rtl:pr-20">{t('text-item')}</span>,
-      dataIndex: '',
-      key: 'items',
+      dataIndex: 'product',
+      key: 'product',
       align: alignLeft,
       width: 250,
       ellipsis: true,
@@ -108,26 +108,27 @@ export const OrderItems = ({
       align: alignRight,
       width: 140,
       render: function RenderReview(_: any, record: any) {
+        // console.log(record);
         function openReviewModal() {
           openModal('REVIEW_RATING', {
-            product_id: record.id,
-            shop_id: record.shop_id,
+            product: record?.product?._id,
+            shop_id: record?.product?.shop_id,
             order_id: orderId,
-            name: record.name,
-            image: record.image,
-            my_review: getReview(record),
+            name: record?.product?.name,
+            image: record?.product?.image,
+            my_review: getReview(record?.product),
             ...(record.pivot?.variation_option_id && {
               variation_option_id: record.pivot?.variation_option_id,
             }),
           });
         }
-
+        // console.log(record);
         return (
           <button
             onClick={openReviewModal}
             className="cursor-pointer text-sm font-semibold text-body transition-colors hover:text-accent"
           >
-            {getReview(record)
+            {getReview(record?.product)
               ? t('text-update-review')
               : t('text-write-review')}
           </button>
@@ -142,9 +143,7 @@ export const OrderItems = ({
       columns={orderTableColumns}
       data={products}
       rowKey={(record: any) =>
-        record.pivot?.variation_option_id
-          ? record.pivot.variation_option_id
-          : record.created_at
+        record?.product?._id ? record?.product?._id : record?.product?.createdAt
       }
       className="orderDetailsTable w-full"
       rowClassName="!cursor-auto"

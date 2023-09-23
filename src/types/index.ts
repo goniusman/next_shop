@@ -338,9 +338,9 @@ export interface VerifyCouponResponse {
 }
 
 export interface CreateReviewInput {
-  product_id: string;
-  shop_id: string;
-  order_id: string;
+  product: string;
+  shop: string;
+  order: string;
   variation_option_id: string;
   comment?: string;
   rating: number;

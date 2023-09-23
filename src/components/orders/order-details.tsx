@@ -109,7 +109,7 @@ const OrderDetails = ({ order }: Props) => {
   const { price: sales_tax } = usePrice({
     amount: order?.sales_tax,
   });
-
+  // console.log(order);
   return (
     <div className="flex w-full flex-col border border-border-200 bg-white lg:w-2/3">
       <div className="flex flex-col items-center border-b border-border-200 p-5 md:flex-row md:justify-between">
@@ -121,7 +121,7 @@ const OrderDetails = ({ order }: Props) => {
           <RefundView status={refund?.status} orderId={_id} />
 
           <Link
-            href={Routes.order(_id)}
+            href={Routes.order(tracking_number)}
             className="flex items-center text-sm font-semibold text-accent no-underline transition duration-200 hover:text-accent-hover focus:text-accent-hover"
           >
             <Eye width={20} className="ltr:mr-2 rtl:ml-2" />

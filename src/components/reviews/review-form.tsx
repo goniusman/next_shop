@@ -1,15 +1,15 @@
-import { useTranslation } from 'next-i18next';
-import * as yup from 'yup';
 import Button from '@/components/ui/button';
-import { useModalState } from '@/components/ui/modal/modal.context';
-import { Form } from '@/components/ui/forms/form';
-import { Image } from '@/components/ui/image';
 import FileInput from '@/components/ui/forms/file-input';
-import RateInput from '@/components/ui/forms/rate-input';
+import { Form } from '@/components/ui/forms/form';
 import Label from '@/components/ui/forms/label';
+import RateInput from '@/components/ui/forms/rate-input';
 import TextArea from '@/components/ui/forms/text-area';
+import { Image } from '@/components/ui/image';
+import { useModalState } from '@/components/ui/modal/modal.context';
 import { useCreateReview, useUpdateReview } from '@/framework/review';
 import { CreateReviewInput } from '@/types';
+import { useTranslation } from 'next-i18next';
+import * as yup from 'yup';
 
 const reviewFormSchema = yup.object().shape({
   rating: yup.number().required('error-rating-required'),
@@ -21,13 +21,13 @@ export default function ReviewForm() {
   const { t } = useTranslation('common');
   const { data } = useModalState();
   const { createReview, isLoading: creating } = useCreateReview();
-
+  // console.log(data);
   const { updateReview, isLoading } = useUpdateReview();
 
   const onSubmit = (
     values: Omit<
       CreateReviewInput,
-      'product_id' | 'shop_id' | 'order_id' | 'variation_option_id'
+      'product' | 'shop' | 'order' | 'variation_option_id'
     >
   ) => {
     if (data?.my_review) {
@@ -37,7 +37,8 @@ export default function ReviewForm() {
         // @ts-ignore
         photos: values?.photos?.map(({ __typename, ...rest }) => rest),
         id: data.my_review.id,
-        order_id: data.order_id,
+        order: data.order_id,
+        product: data.product,
         variation_option_id: data.variation_option_id,
       });
       return;
@@ -45,11 +46,12 @@ export default function ReviewForm() {
     // @ts-ignore
     createReview({
       ...values,
-      product_id: data.product_id,
-      shop_id: data.shop_id,
-      order_id: data.order_id,
+      product: data.product,
+      shop: data.shop_id,
+      order: data.order_id,
       variation_option_id: data.variation_option_id,
     });
+    console.log(data);
   };
   return (
     <div className="flex h-full min-h-screen w-screen flex-col justify-center bg-light md:h-auto md:min-h-0 md:max-w-[590px] md:rounded-xl">
@@ -70,7 +72,12 @@ export default function ReviewForm() {
         </div>
       </div>
       <div className="p-7">
-        <Form<Omit<CreateReviewInput, 'product_id' | 'shop_id' | 'variation_option_id' | 'order_id'>>
+        <Form<
+          Omit<
+            CreateReviewInput,
+            'product_id' | 'shop_id' | 'variation_option_id' | 'order_id'
+          >
+        >
           onSubmit={onSubmit}
           validationSchema={reviewFormSchema}
           useFormProps={{

@@ -1,6 +1,6 @@
 export function formatOrderedProduct(product: any) {
   return {
-    product_id: product?.productId ? product?.productId : product?._id,
+    product: product?.productId ? product?.productId : product?._id,
     ...(product?.variationId
       ? { variation_option_id: product?.variationId }
       : {}),
