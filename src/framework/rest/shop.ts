@@ -26,7 +26,7 @@ export function useShops(options?: Partial<ShopQueryOptions>) {
   function handleLoadMore() {
     fetchNextPage();
   }
-  console.log(options);
+  // console.log(options);
   return {
     shops: data?.pages?.flatMap((page) => page.data) ?? [],
     paginatorInfo: Array.isArray(data?.pages)

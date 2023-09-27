@@ -1,19 +1,19 @@
-import { useTranslation } from 'next-i18next';
-import { Menu, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
-import cn from 'classnames';
-import Rating from '@/components/ui/rating-badge';
-import dayjs from 'dayjs';
-import { Image } from '@/components/ui/image';
 import { CheckedIcon } from '@/components/icons/checked';
+import { DislikeIcon } from '@/components/icons/dislike-icon';
 import { LikeIcon } from '@/components/icons/like-icon';
 import { MenuIcon } from '@/components/icons/menu-icon';
-import { DislikeIcon } from '@/components/icons/dislike-icon';
-import { productPlaceholder } from '@/lib/placeholders';
-import { useCreateFeedback } from '@/framework/product';
-import type { Review } from '@/types';
+import { Image } from '@/components/ui/image';
 import { useModalAction } from '@/components/ui/modal/modal.context';
+import Rating from '@/components/ui/rating-badge';
+import { useCreateFeedback } from '@/framework/product';
 import { useUser } from '@/framework/user';
+import { productPlaceholder } from '@/lib/placeholders';
+import type { Review } from '@/types';
+import { Menu, Transition } from '@headlessui/react';
+import cn from 'classnames';
+import dayjs from 'dayjs';
+import { useTranslation } from 'next-i18next';
+import { Fragment } from 'react';
 type ReviewCardProps = {
   review: Review;
 };
@@ -30,7 +30,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
     rating,
     photos,
     created_at,
-    user,
+    customer,
     negative_feedbacks_count,
     positive_feedbacks_count,
     my_feedback,
@@ -69,7 +69,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
       <Rating rating={rating} className="mb-2.5" />
       <div className="mb-4 flex items-center text-xs text-gray-500">
         {t('text-by')}{' '}
-        <span className="capitalize ltr:ml-1 rtl:mr-1">{user?.name}</span>
+        <span className="capitalize ltr:ml-1 rtl:mr-1">{customer?.name}</span>
         <CheckedIcon className="h-[13px] w-[13px] text-gray-700 ltr:ml-1 rtl:mr-1" />
       </div>
       <p className="text-base leading-7 text-heading">{comment}</p>
@@ -83,7 +83,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
           >
             <Image
               src={photo.thumbnail ?? productPlaceholder}
-              alt={user.name ?? ''}
+              alt={customer.name ?? ''}
               width={80}
               height={80}
               objectFit="contain"

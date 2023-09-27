@@ -15,7 +15,7 @@ const ShopCard: React.FC<ShopCardProps> = ({ shop }) => {
   const { t } = useTranslation();
 
   const isNew = false;
-  console.log(shop);
+  // console.log(shop);
   return (
     <Link href={Routes.shop(shop.slug)}>
       <div className="relative flex cursor-pointer items-center rounded border border-gray-200 p-5">

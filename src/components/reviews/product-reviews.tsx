@@ -84,7 +84,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             })}
           >
             {reviews?.map((review: any) => (
-              <ReviewCard key={`review-no-${review?.id}`} review={review} />
+              <ReviewCard key={`review-no-${review?._id}`} review={review} />
             ))}
 
             {/* Pagination */}

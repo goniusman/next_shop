@@ -1,14 +1,14 @@
+import StripeBaseForm from '@/components/payment/stripe/stripe-base-form';
 import { useAddCards } from '@/framework/card';
+import getStripe from '@/lib/get-stripejs';
 import {
-  useStripe,
-  useElements,
   CardNumberElement,
   Elements,
+  useElements,
+  useStripe,
 } from '@stripe/react-stripe-js';
-import { useState, useEffect } from 'react';
 import isEmpty from 'lodash/isEmpty';
-import StripeBaseForm from '@/components/payment/stripe/stripe-base-form';
-import getStripe from '@/lib/get-stripejs';
+import { useEffect, useState } from 'react';
 
 const CardForm = () => {
   const stripe = useStripe();
@@ -43,7 +43,7 @@ const CardForm = () => {
         method_key: paymentMethod?.id as string,
         default_card: defaultCard as boolean,
         //@ts-ignore
-        payment_gateway: 'stripe' as string
+        payment_gateway: 'stripe' as string,
       });
     }
   };

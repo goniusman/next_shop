@@ -216,7 +216,7 @@ function OrderView({ order, language }: any) {
         <div className="mt-12">
           <OrderItems products={order?.products} orderId={order?._id} />
         </div>
-        {order?.children?.length > 1 ? (
+        {order?.children?.length > 0 ? (
           <div>
             <h2 className="mt-12 mb-6 text-xl font-bold text-heading">
               {t('text-sub-orders')}

@@ -603,7 +603,7 @@ export interface Review {
   rating: number;
   comment: string;
   photos: Attachment[];
-  user: User;
+  customer: User;
   product: Product;
   shop: Shop;
   feedbacks: Feedback[];

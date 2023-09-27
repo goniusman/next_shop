@@ -39,6 +39,7 @@ export function useReview({ id }: { id: string }) {
       enabled: Boolean(id),
     }
   );
+  // console.log(data);
   return {
     review: data,
     isLoading,

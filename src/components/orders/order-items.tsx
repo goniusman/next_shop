@@ -3,6 +3,8 @@ import Link from '@/components/ui/link';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { Table } from '@/components/ui/table';
 import { Routes } from '@/config/routes';
+import { useReview } from '@/framework/review';
+
 import { getReview } from '@/lib/get-review';
 import { useIsRTL } from '@/lib/locals';
 import { productPlaceholder } from '@/lib/placeholders';
@@ -108,18 +110,22 @@ export const OrderItems = ({
       align: alignRight,
       width: 140,
       render: function RenderReview(_: any, record: any) {
-        // console.log(record);
+        const { review } = useReview({
+          id: record.product._id,
+        });
+        // console.log(review);
         function openReviewModal() {
           openModal('REVIEW_RATING', {
             product: record?.product?._id,
-            shop_id: record?.product?.shop_id,
-            order_id: orderId,
+            shop: record?.product?.shop_id,
+            order: orderId,
             name: record?.product?.name,
             image: record?.product?.image,
-            my_review: getReview(record?.product),
-            ...(record.pivot?.variation_option_id && {
-              variation_option_id: record.pivot?.variation_option_id,
-            }),
+            review: getReview(review),
+            // my_review: getReview(record?.product),
+            // ...(record.pivot?.variation_option_id && {
+            //   variation_option_id: record.pivot?.variation_option_id,
+            // }),
           });
         }
         // console.log(record);
@@ -128,7 +134,7 @@ export const OrderItems = ({
             onClick={openReviewModal}
             className="cursor-pointer text-sm font-semibold text-body transition-colors hover:text-accent"
           >
-            {getReview(record?.product)
+            {getReview(review)
               ? t('text-update-review')
               : t('text-write-review')}
           </button>

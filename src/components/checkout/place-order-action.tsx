@@ -47,7 +47,8 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
   useEffect(() => {
     setErrorMessage(null);
   }, [payment_gateway]);
-
+  // console.log(items);
+  
   const available_items = items?.filter(
     (item) => !verified_response?.unavailable_products?.includes(item._id)
   );
@@ -61,6 +62,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
     },
     Number(discount)
   );
+
   const handlePlaceOrder = () => {
     if (!customer_contact) {
       setErrorMessage('Contact Number Is Required');
@@ -79,7 +81,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
       products: available_items?.map((item) => formatOrderedProduct(item)),
       status: orderStatuses[0]?._id ?? '1',
       amount: subtotal,
-      coupon_id: Number(coupon?.id),
+      coupon_id: Number(coupon?._id),
       discount: discount ?? 0,
       paid_total: total,
       sales_tax: verified_response?.total_tax,
@@ -107,6 +109,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
     //@ts-ignore
     createOrder(input);
   };
+
   const isDigitalCheckout = available_items.find((item) =>
     Boolean(item.is_digital)
   );
@@ -121,9 +124,11 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
         delivery_time,
         available_items,
       ];
+
   const isAllRequiredFieldSelected = formatRequiredFields.every(
     (item) => !isEmpty(item)
   );
+
   return (
     <>
       <Button
