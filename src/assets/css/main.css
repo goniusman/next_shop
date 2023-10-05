@@ -248,10 +248,42 @@
     * orange-900
     */
     --color-orange-900: 124, 45, 18;
+
+    /*
+    Pending
+    */
+    --color-pending: 201, 161, 22;
+
+    /*
+    Processing
+    */
+    --color-processing: 158, 117, 0;
+
+    /*
+    Complete
+    */
+    --color-complete: 0, 161, 127;
+
+    /*
+    Canceled
+    */
+    --color-canceled: 227, 110, 1;
+
+    /*
+    Failed
+    */
+    --color-failed: 238, 43, 0;
+
+    /*
+    Out for delivery
+    */
+    --color-out-for-delivery: 126, 173, 66;
   }
 
   html {
     -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {

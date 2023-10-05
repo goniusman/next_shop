@@ -115,7 +115,7 @@ export default function StripeElementBaseForm({
 
     setIsLoading(false);
   };
-
+ 
   const paymentElementOptions = {
     layout: 'tabs',
     defaultCollapsed: false,

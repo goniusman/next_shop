@@ -10,6 +10,7 @@ export const SHOPS_LIMIT = 20;
 export const RTL_LANGUAGES: ReadonlyArray<string> = ['ar', 'he'];
 export const PRODUCT_INITIAL_FETCH_LIMIT = 30;
 export const DEFAULT_LANGUAGE = process.env.NEXT_PUBLIC_DEFAULT_LANGUAGE ?? "en";
+export const EMAIL_VERIFIED = 'emailVerified';
 
 export function getDirection(language: string | undefined) {
   if (!language) return 'ltr';

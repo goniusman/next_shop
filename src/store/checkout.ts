@@ -1,5 +1,5 @@
-import { Address, Coupon } from '@/types';
 import { CHECKOUT } from '@/lib/constants';
+import { Address, Coupon } from '@/types';
 import { atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 interface DeliveryTime {
@@ -79,6 +79,15 @@ export const verifiedTokenAtom = atom(
     return set(checkoutAtom, { ...prev, token: data });
   }
 );
+
+export const paymentSubGatewayAtom = atom(
+  (get) => get(checkoutAtom).payment_sub_gateway,
+  (get, set, data: string) => {
+    const prev = get(checkoutAtom);
+    return set(checkoutAtom, { ...prev, payment_sub_gateway: data });
+  }
+);
+
 export const customerContactAtom = atom(
   (get) => get(checkoutAtom).customer_contact,
   (get, set, data: string) => {

@@ -1,8 +1,5 @@
-import {
-  useModalState,
-} from '@/components/ui/modal/modal.context';
+import { useModalState } from '@/components/ui/modal/modal.context';
 import StripeElementForm from './stripe/stripe-element-form';
-
 
 const PAYMENTS_FORM_COMPONENTS: any = {
   STRIPE: {
@@ -14,7 +11,9 @@ const StripeElementModal = () => {
   const {
     data: { paymentGateway, paymentIntentInfo, trackingNumber },
   } = useModalState();
-  const PaymentMethod = PAYMENTS_FORM_COMPONENTS[paymentGateway?.toUpperCase()];
+  // console.log(paymentGateway);
+  // const PaymentMethod = PAYMENTS_FORM_COMPONENTS[paymentGateway?.toUpperCase()];
+  const PaymentMethod = PAYMENTS_FORM_COMPONENTS['stripe'.toUpperCase()];
   const PaymentComponent = PaymentMethod?.component;
 
   return (

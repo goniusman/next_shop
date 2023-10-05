@@ -19,6 +19,7 @@ export interface HomePageProps {
   variables: {
     products: any;
     popularProducts?: any;
+    bestSellingProducts?: any;
     categories: any;
     types: any;
   };
@@ -41,12 +42,20 @@ export interface SearchParamOptions {
   max_price: string;
   rating: string;
   question: string;
+  notice: string;
 }
 
 export interface QueryOptions {
   language: string;
   page?: number;
   limit?: number;
+}
+
+export interface BestSellingProductQueryOptions extends QueryOptions {
+  language: string;
+  type_slug: string;
+  with: string;
+  range: number;
 }
 
 export interface PaginatorInfo<T> {
@@ -177,6 +186,9 @@ export interface Product {
   manufacturer: Manufacturer;
   tags: Tag[];
   is_digital: boolean;
+  is_external: boolean;
+  external_product_url: string;
+  external_product_button_text: string;
   product_type: string;
   description: string;
   type: Type;
@@ -200,6 +212,17 @@ export interface Product {
   created_at: string;
   updated_at: string;
   language: string;
+  video?: {
+    url: string;
+  }[];
+}
+
+export interface ShopAddress {
+  country: string;
+  city: string;
+  state: string;
+  zip: string;
+  street_address: string;
 }
 
 export interface RatingCount {
@@ -247,6 +270,73 @@ export interface Shop {
   slug: string;
   description: string;
   cover_image: Attachment;
+  __typename?: string;
+  logo?: Attachment;
+  is_active?: boolean;
+  distance?: number;
+  address?: ShopAddress;
+  settings?: {
+    contact?: string;
+    social?: any;
+    location?: GoogleMapLocation;
+  };
+  notifications?: string | null;
+  lat?: number | string | null;
+  lng?: number | string | null;
+}
+export interface GoogleMapLocation {
+  lat?: number | string;
+  lng?: number | string;
+  street_number?: string;
+  route?: string;
+  street_address?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  zip?: string;
+  formattedAddress?: string;
+  formatted_address?: string;
+}
+
+export interface ShopMapLocation {
+  lat?: string;
+  lng?: string;
+  street_address?: string;
+  formattedAddress?: string;
+}
+export enum StoreNoticePriorityType {
+  High = 'high',
+  Medium = 'medium',
+  Low = 'low',
+}
+export interface StoreNotice {
+  id: string;
+  translated_languages: string[];
+  priority: StoreNoticePriorityType;
+  notice: string;
+  description?: string;
+  effective_from?: string;
+  expired_at: string;
+  type?: string;
+  is_read?: boolean;
+  shops?: Shop[];
+  users?: User[];
+  received_by?: string;
+  created_by: string;
+  expire_at: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at?: string;
+  creator?: any;
+}
+export interface StoreNoticeQueryOptions extends QueryOptions {
+  shop_id: string;
+}
+
+export enum CouponType {
+  FIXED = 'fixed',
+  PERCENTAGE = 'percentage',
+  FREE_SHIPPING = 'free_shipping',
 }
 
 export interface Author {
@@ -270,6 +360,7 @@ export interface Coupon {
   slug: string;
   amount?: string;
   code?: string;
+  type: CouponType;
 }
 
 export interface Tag {
@@ -301,6 +392,33 @@ export interface Settings {
   };
 }
 
+export interface SetupIntentInfo {
+  client_secret?: string;
+  intent_id?: string;
+}
+export interface PaymentIntentInfo {
+  client_secret: string;
+  payment_id: string;
+  is_redirect: boolean;
+  redirect_url: string;
+  currency: string;
+  amount: string;
+}
+export interface Card {
+  expires: string;
+  network: string;
+  origin: string;
+  owner_name: string;
+  payment_gateway_id: number | string;
+  default_card: number;
+}
+export interface PaymentIntent {
+  id: number | string;
+  order_id: number | string;
+  payment_gateway: PaymentGateway;
+  tracking_number: string;
+  payment_intent_info: PaymentIntentInfo;
+}
 export interface Order {
   _id: any;
   id: number | string;
@@ -308,13 +426,15 @@ export interface Order {
   customer_id: number | string;
   // customer?: Maybe<User>;
   status: OrderStatus;
+  customer_name: string;
+  customer_contact: string;
+  customer?: User;
   amount: number;
   children: Order[];
   sales_tax: number;
   total: number;
   paid_total: number;
   payment_id?: string;
-  payment_gateway?: string;
   coupon?: Coupon;
   discount?: number;
   delivery_fee?: number;
@@ -326,6 +446,10 @@ export interface Order {
   shipping_address?: Address;
   refund: Refund;
   language?: string;
+  payment_intent?: PaymentIntent;
+  order_status: string;
+  payment_status: string;
+  payment_gateway: string;
 }
 
 export interface VerifyCouponInputType {
@@ -345,6 +469,10 @@ export interface CreateReviewInput {
   comment?: string;
   rating: number;
   photos?: Attachment[];
+}
+export interface CreateOrderPaymentInput {
+  tracking_number: string;
+  payment_gateway: string;
 }
 
 export interface UpdateReviewInput extends CreateReviewInput {
@@ -409,6 +537,23 @@ export interface Refund {
   updated_at: string;
 }
 
+export enum PaymentGateway {
+  STRIPE = 'STRIPE',
+  COD = 'CASH_ON_DELIVERY',
+  CASH = 'CASH',
+  FULL_WALLET_PAYMENT = 'FULL_WALLET_PAYMENT',
+  PAYPAL = 'PAYPAL',
+  MOLLIE = 'MOLLIE',
+  RAZORPAY = 'RAZORPAY',
+  SSLCOMMERZ = 'SSLCOMMERZ',
+  PAYSTACK = 'PAYSTACK',
+  PAYMONGO = 'PAYMONGO',
+  XENDIT = 'XENDIT',
+  IYZICO = 'IYZICO',
+  BKASH = 'BKASH',
+  FLUTTERWAVE = 'FLUTTERWAVE',
+}
+
 enum RefundStatus {
   APPROVED = 'Approved',
   PENDING = 'Pending',
@@ -429,6 +574,7 @@ export interface Address {
     zip: string;
     street_address: string;
   };
+  location: GoogleMapLocation;
 }
 
 export interface User {
@@ -448,6 +594,17 @@ export interface User {
     avatar?: Attachment;
   };
   address: Address[];
+  payment_gateways?: UserPaymentGateway[];
+}
+
+export interface UserPaymentGateway {
+  id: number | string;
+  customer_id: string;
+  gateway_name: PaymentGateway;
+  user_id: number | string;
+}
+export interface UpdateEmailUserInput {
+  email: string;
 }
 
 export interface UpdateUserInput extends Partial<User> {
@@ -502,6 +659,19 @@ export interface PasswordChangeResponse {
 export interface AuthResponse {
   token: string;
   permissions: string[];
+}
+
+export interface PasswordChangeResponse extends Success {}
+
+export interface EmailChangeResponse extends Success {}
+export interface VerificationEmailUserInput extends Success {
+  email: string;
+}
+
+export interface PaymentIntentCollection {
+  tracking_number?: string;
+  payment_intent_info?: PaymentIntentInfo;
+  payment_gateway?: string;
 }
 
 export interface OTPResponse {
@@ -643,6 +813,20 @@ export interface OrderStatus {
   created_at: string;
   updated_at: string;
 }
+export enum PaymentStatus {
+  PENDING = 'payment-pending',
+  PROCESSING = 'payment-processing',
+  SUCCESS = 'payment-success',
+  FAILED = 'payment-failed',
+  REVERSAL = 'payment-reversal',
+  COD = 'cash-on-delivery',
+  AWAITING_FOR_APPROVAL = 'payment-awaiting-for-approval',
+}
+
+export interface Success {
+  success: boolean;
+  message: string;
+}
 
 export interface ConnectProductOrderPivot {
   product_id: number;
@@ -708,6 +892,7 @@ export interface OrderStatusPaginator extends PaginatorInfo<OrderStatus> {}
 export interface RefundPaginator extends PaginatorInfo<Refund> {}
 
 export interface ReviewPaginator extends PaginatorInfo<Review> {}
+export interface StoreNoticePaginator extends PaginatorInfo<StoreNotice> {}
 
 export interface QuestionPaginator extends PaginatorInfo<Question> {}
 

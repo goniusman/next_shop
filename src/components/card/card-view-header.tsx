@@ -1,7 +1,7 @@
-import { useModalAction } from '@/components/ui/modal/modal.context';
 import { PlusIcon } from '@/components/icons/plus-icon';
-import { useTranslation } from 'next-i18next';
+import { useModalAction } from '@/components/ui/modal/modal.context';
 import { useSettings } from '@/framework/settings';
+import { useTranslation } from 'next-i18next';
 
 const CardViewHeader = () => {
   const { openModal } = useModalAction();

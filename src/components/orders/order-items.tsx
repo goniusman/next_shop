@@ -110,8 +110,9 @@ export const OrderItems = ({
       align: alignRight,
       width: 140,
       render: function RenderReview(_: any, record: any) {
+        // console.log(record);
         const { review } = useReview({
-          id: record.product._id,
+          id: record?.product._id,
         });
         // console.log(review);
         function openReviewModal() {

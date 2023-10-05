@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { AUTH_TOKEN_KEY } from '@/lib/constants';
+import { AUTH_TOKEN_KEY, EMAIL_VERIFIED } from '@/lib/constants';
 export function useToken() {
   return {
     setToken(token: string) {
@@ -15,6 +15,13 @@ export function useToken() {
       const token = Cookies.get(AUTH_TOKEN_KEY);
       if (!token) return false;
       return true;
+    },
+    setEmailVerified(emailVerified: boolean | null) {
+      Cookies.set(EMAIL_VERIFIED, JSON.stringify({ emailVerified }));
+    },
+    getEmailVerified() {
+      const emailVerified = Cookies.get(EMAIL_VERIFIED);
+      return emailVerified ? JSON.parse(emailVerified) : true;
     },
   };
 }

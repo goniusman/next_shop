@@ -42,7 +42,7 @@
 
 .rc-pagination .rc-pagination-jump-prev button,
 .rc-pagination .rc-pagination-jump-next button {
-  @apply h-8 text-body-dark focus:outline-none focus:ring-1 focus:ring-accent-300;
+  @apply h-8 text-body-dark focus:outline-0 focus:ring-1 focus:ring-accent-300;
 }
 
 .rc-pagination .rc-pagination-item.rc-pagination-item-active {
@@ -60,7 +60,7 @@
 
 .rc-pagination .rc-pagination-options .rc-pagination-options-quick-jumper input,
 .rc-pagination.rc-pagination-simple .rc-pagination-simple-pager input {
-  @apply h-8 rounded border border-border-base bg-gray-50 px-2 font-body text-sm text-heading hover:border-accent focus:border-accent focus:outline-none;
+  @apply h-8 rounded border border-border-base bg-gray-50 px-2 font-body text-sm text-heading hover:border-accent focus:border-accent focus:outline-0;
 }
 
 /* RC Table */
@@ -285,6 +285,9 @@ Overlay Scrollbar - os-theme-thin-dark
   height: 100%;
   min-width: 30px;
 }
+.os-theme-thin-dark .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle {
+  background-color: transparent;
+}
 .os-theme-thin-dark
   > .os-scrollbar-vertical
   > .os-scrollbar-track
@@ -391,6 +394,24 @@ html[dir='rtl'] .react-tel-input .country-list .flag {
 .StripePay:hover {
   background-color: #43458b;
 }
+
+.stripe-dynamic-payment-element .StripeElement {
+  height: auto;
+}
+
+.stripe-payment-modal .StripeElement {
+  @apply h-full border-transparent;
+}
+
+.stripe-payment-modal .p-FieldLabel {
+  margin-bottom: 0.5rem !important;
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+/* Stripe End */
 
 /* React toastify */
 .Toastify__toast-theme--colored.Toastify__toast--success {
@@ -791,9 +812,102 @@ html[dir='rtl'] .react-tel-input .country-list .flag {
   opacity: 1;
   stroke-dashoffset: 0;
 }
-[dir="rtl"] .react-tel-input .selected-flag {
+[dir='rtl'] .react-tel-input .selected-flag {
   padding-right: 11px !important;
 }
-[dir="rtl"] .react-tel-input .selected-flag .arrow {
+[dir='rtl'] .react-tel-input .selected-flag .arrow {
   right: 29px;
+}
+.payment-modal .StripeElement--focus {
+  border-color: rgb(var(--color-accent));
+}
+.StripeElement iframe:focus-visible {
+  outline: none;
+}
+
+/* card styles */
+.bank-payment-card .payment-card-bg {
+  background: linear-gradient(25deg, #211c18, #aaa7a2);
+}
+.bank-payment-card-visa .payment-card-bg {
+  background: linear-gradient(25deg, #0f509e, #1399cd);
+}
+.bank-payment-card-amex .payment-card-bg {
+  background: linear-gradient(25deg, #308c67, #a3f2cf);
+}
+.bank-payment-card-mastercard .payment-card-bg {
+  background: linear-gradient(25deg, #fbfbfb, #e8e9e5);
+}
+.bank-payment-card-mastercard .payment-card-option {
+  color: black;
+}
+
+/* card view table */
+.card-view-table table {
+  border-collapse: unset;
+}
+.card-view-table .rc-table-thead tr th {
+  @apply border-b-0 bg-[#F7F7FA] py-4;
+}
+.card-view-table .rc-table-tbody tr td {
+  @apply border-0 border-b border-solid border-[#e1e7ec] py-5 transition-all duration-300;
+}
+.row-highlight .rc-table-cell {
+  @apply bg-[#f0f9f7];
+}
+.rc-table-cell.rc-table-cell-row-hover .default-card-button,
+.rc-table-cell.rc-table-cell-row-hover .make-default-card {
+  @apply opacity-100;
+}
+.row-highlight .rc-table-cell.rc-table-cell-row-hover {
+  @apply !bg-[#e9f6f3];
+}
+
+/* Product video */
+.book-product-video #productGallery {
+  padding-top: 24px;
+  background-color: #eee;
+  padding-bottom: 20px;
+}
+@media (min-width: 767px) {
+  .book-product-video #productGallery {
+    padding-top: 64px;
+    background-color: #eee;
+    padding-bottom: 32px;
+  }
+}
+
+#productGallery > .swiper-wrapper {
+  align-items: center;
+}
+.product-video-iframe > iframe {
+  width: 100%;
+  height: 450px;
+}
+.product-video-iframe video {
+  width: 100%;
+}
+.bg-overlay {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 29.77%, rgba(0, 0, 0, 0.35) 65.1%, rgba(0, 0, 0, 0.85) 100%);
+  border-radius: 8px 8px 0px 0px;
+}
+
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.pac-container {
+  @apply py-2 after:hidden rounded-lg;
+  box-shadow: -8px 8px 16px rgba(0,0,0,0.15);
+}
+
+.pac-container .pac-item{
+  @apply py-2.5 px-4 hover:bg-gray-100 cursor-pointer border-none leading-4;
+}
+
+.pac-container .pac-item .pac-icon-marker{
+  @apply hidden;
 }

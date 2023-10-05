@@ -1,5 +1,5 @@
-import dynamic from 'next/dynamic';
 import Modal from '@/components/ui/modal/modal';
+import dynamic from 'next/dynamic';
 import { useModalAction, useModalState } from './modal.context';
 const OtpLoginView = dynamic(() => import('@/components/auth/otp-login'));
 const Login = dynamic(() => import('@/components/auth/login-form'), {
@@ -18,6 +18,12 @@ const CreateOrUpdateAddressForm = dynamic(
   () => import('@/components/address/address-form'),
   { ssr: false }
 );
+
+const LocationBasedShopForm = dynamic(
+  () => import('@/components/form/location-based-shop-form'),
+  { ssr: false }
+);
+
 const CreateOrUpdateGuestAddressForm = dynamic(
   () => import('@/components/checkout/create-or-update-guest')
 );
@@ -45,9 +51,36 @@ const ReviewImageModal = dynamic(
   () => import('@/components/reviews/review-image-modal')
 );
 
+const PaymentModal = dynamic(
+  () => import('@/components/payment/payment-modal'),
+  { ssr: false }
+);
+const StripeElementModal = dynamic(
+  () => import('@/components/payment/stripe-element-modal'),
+  { ssr: false }
+);
+const AddNewPaymentModal = dynamic(
+  () => import('@/components/payment/add-new-payment-modal'),
+  { ssr: false }
+);
+const DeleteCardModal = dynamic(() => import('@/components/card/delete-view'));
+const AddNewCardModal = dynamic(
+  () => import('@/components/card/add-new-card-modal'),
+  { ssr: false }
+);
+const GateWayControlModal = dynamic(
+  () => import('@/components/payment/gateway-control/gateway-modal'),
+  { ssr: false }
+);
+
 const ManagedModal = () => {
   const { isOpen, view, data } = useModalState();
   const { closeModal } = useModalAction();
+
+  // Controlled payment modal [custom & default]
+  if (view === 'PAYMENT_MODAL') {
+    return <PaymentModal />;
+  }
 
   return (
     <Modal open={isOpen} onClose={closeModal}>
@@ -60,6 +93,9 @@ const ManagedModal = () => {
       {view === 'ADD_OR_UPDATE_GUEST_ADDRESS' && (
         <CreateOrUpdateGuestAddressForm />
       )}
+
+      {view === 'LOCATION_BASED_SHOP' && <LocationBasedShopForm />}
+
       {view === 'ADD_OR_UPDATE_CHECKOUT_CONTACT' && (
         <AddOrUpdateCheckoutContact />
       )}
@@ -84,6 +120,15 @@ const ManagedModal = () => {
         <ProductVariation productSlug={data} />
       )}
       {view === 'REVIEW_IMAGE_POPOVER' && <ReviewImageModal />}
+
+      {/* Payment Modal */}
+      {view === 'USE_NEW_PAYMENT' && <AddNewPaymentModal />}
+      {/* Card/My Card Modal */}
+      {view === 'ADD_NEW_CARD' && <AddNewCardModal />}
+      {view === 'DELETE_CARD_MODAL' && <DeleteCardModal />}
+      {view === 'GATEWAY_MODAL' && <GateWayControlModal />}
+      {view === 'STRIPE_ELEMENT_MODAL' && <StripeElementModal />}
+
     </Modal>
   );
 };

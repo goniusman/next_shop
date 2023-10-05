@@ -4,6 +4,8 @@ import type {
   Author,
   AuthorPaginator,
   AuthorQueryOptions,
+  BestSellingProductQueryOptions,
+  Card,
   CategoryPaginator,
   CategoryQueryOptions,
   ChangePasswordUserInput,
@@ -14,6 +16,7 @@ import type {
   CreateContactUsInput,
   CreateFeedbackInput,
   CreateOrderInput,
+  CreateOrderPaymentInput,
   CreateQuestionInput,
   CreateRefundInput,
   CreateReviewInput,
@@ -34,6 +37,7 @@ import type {
   OrderStatusPaginator,
   OtpLoginInputType,
   PasswordChangeResponse,
+  PaymentIntentCollection,
   PopularProductQueryOptions,
   Product,
   ProductPaginator,
@@ -53,9 +57,12 @@ import type {
   Settings,
   SettingsQueryOptions,
   Shop,
+  ShopMapLocation,
   ShopPaginator,
   ShopQueryOptions,
   SocialLoginInputType,
+  StoreNoticePaginator,
+  StoreNoticeQueryOptions,
   TagPaginator,
   TagQueryOptions,
   Type,
@@ -63,6 +70,7 @@ import type {
   UpdateReviewInput,
   UpdateUserInput,
   User,
+  VerificationEmailUserInput,
   VerifiedCheckoutData,
   VerifyCouponInputType,
   VerifyCouponResponse,
@@ -72,9 +80,11 @@ import type {
   WishlistPaginator,
   WishlistQueryOptions,
 } from '@/types';
-import { OTPVerifyResponse } from '@/types';
+
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
+
+import { OTPVerifyResponse } from '@/types';
 
 class Client {
   products = {
@@ -111,6 +121,9 @@ class Client {
       }),
     popular: (params: Partial<PopularProductQueryOptions>) =>
       HttpClient.get<Product[]>(API_ENDPOINTS.PRODUCTS_POPULAR, params),
+
+    bestSelling: (params: Partial<BestSellingProductQueryOptions>) =>
+      HttpClient.get<Product[]>(API_ENDPOINTS.BEST_SELLING_PRODUCTS, params),
 
     questions: ({ question, ...params }: QuestionQueryOptions) =>
       HttpClient.get<QuestionPaginator>(API_ENDPOINTS.PRODUCTS_QUESTIONS, {
@@ -224,7 +237,24 @@ class Client {
       }),
     get: (slug: string) =>
       HttpClient.get<Shop>(`${API_ENDPOINTS.SHOPS}/${slug}`),
+
+    searchNearShops: (input: ShopMapLocation) =>
+      HttpClient.get<any>(API_ENDPOINTS.NEAR_SHOPS, input),
+    getSearchNearShops: ({ lat, lng }: ShopMapLocation) =>
+      HttpClient.get<any>(`${API_ENDPOINTS.NEAR_SHOPS}/${lat}/${lng}`),
   };
+
+  storeNotice = {
+    all: ({ shop_id, ...params }: Partial<StoreNoticeQueryOptions>) => {
+      return HttpClient.get<StoreNoticePaginator>(API_ENDPOINTS.STORE_NOTICES, {
+        searchJoin: 'and',
+        shop_id: shop_id,
+        ...params,
+        search: HttpClient.formatSearchParams({ shop_id }),
+      });
+    },
+  };
+
   authors = {
     all: ({ name, ...params }: Partial<AuthorQueryOptions>) => {
       return HttpClient.get<AuthorPaginator>(API_ENDPOINTS.AUTHORS, {
@@ -282,6 +312,11 @@ class Client {
     createRefund: (input: CreateRefundInput) =>
       HttpClient.post<Refund>(API_ENDPOINTS.ORDERS_REFUNDS, input),
 
+    payment: (input: CreateOrderPaymentInput) =>
+      HttpClient.post<any>(API_ENDPOINTS.ORDERS_PAYMENT, input),
+    savePaymentMethod: (input: any) =>
+      HttpClient.post<any>(API_ENDPOINTS.SAVE_PAYMENT_METHOD, input),
+
     downloadable: (query?: OrderQueryOptions) =>
       HttpClient.get<DownloadableFilePaginator>(
         API_ENDPOINTS.ORDERS_DOWNLOADS,
@@ -297,7 +332,30 @@ class Client {
         API_ENDPOINTS.GENERATE_DOWNLOADABLE_PRODUCT_LINK,
         input
       ),
+    getPaymentIntentOriginal: ({
+      tracking_number,
+    }: {
+      tracking_number: string;
+    }) =>
+      HttpClient.get<PaymentIntentCollection>(API_ENDPOINTS.PAYMENT_INTENT, {
+        tracking_number,
+      }),
+    getPaymentIntent: ({
+      tracking_number,
+      payment_gateway,
+      recall_gateway,
+    }: {
+      tracking_number: string;
+      payment_gateway?: string;
+      recall_gateway?: boolean;
+    }) =>
+      HttpClient.get<PaymentIntentCollection>(API_ENDPOINTS.PAYMENT_INTENT, {
+        tracking_number,
+        payment_gateway,
+        recall_gateway,
+      }),
   };
+
   users = {
     me: () => {
       return HttpClient.get<User>(`${API_ENDPOINTS.USERS_ME}`);
@@ -338,11 +396,18 @@ class Client {
       ),
     logout: () => HttpClient.post<boolean>(API_ENDPOINTS.USERS_LOGOUT, {}),
     deleteAddress: ({ id }: { id: string }) =>
-      HttpClient.delete<any>(`${API_ENDPOINTS.USERS_ADDRESS_DELETE}/${id}`),
+      HttpClient.delete<boolean>(`${API_ENDPOINTS.USERS_ADDRESS}/${id}`),
     subscribe: (input: { email: string }) =>
       HttpClient.post<any>(API_ENDPOINTS.USERS_SUBSCRIBE_TO_NEWSLETTER, input),
     contactUs: (input: CreateContactUsInput) =>
       HttpClient.post<any>(API_ENDPOINTS.USERS_CONTACT_US, input),
+
+    resendVerificationEmail: () => {
+      return HttpClient.post<VerificationEmailUserInput>(
+        API_ENDPOINTS.SEND_VERIFICATION_EMAIL,
+        {}
+      );
+    },
   };
   wishlist = {
     all: (params: WishlistQueryOptions) =>
@@ -378,6 +443,16 @@ class Client {
         },
       });
     },
+  };
+  cards = {
+    all: (params?: any) =>
+      HttpClient.get<Card[]>(API_ENDPOINTS.CARDS, { ...params }),
+    remove: ({ id }: { id: string }) =>
+      HttpClient.delete<any>(`${API_ENDPOINTS.CARDS}/${id}`),
+    addPaymentMethod: (method_key: any) =>
+      HttpClient.post<any>(API_ENDPOINTS.CARDS, method_key),
+    makeDefaultPaymentMethod: (input: any) =>
+      HttpClient.post<any>(API_ENDPOINTS.SET_DEFAULT_CARD, input),
   };
 }
 
