@@ -485,7 +485,7 @@ export interface ReviewResponse {
 }
 
 export interface CreateRefundInput {
-  order_id: string;
+  order: any;
   title: string;
   description: string;
   images: Attachment[];

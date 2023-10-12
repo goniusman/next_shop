@@ -6,7 +6,6 @@ import Link from '@/components/ui/link';
 import { Table } from '@/components/ui/table';
 import { Routes } from '@/config/routes';
 import { useRefunds } from '@/framework/order';
-import { useUser } from '@/framework/user';
 import { useIsRTL } from '@/lib/locals';
 import usePrice from '@/lib/use-price';
 import dayjs from 'dayjs';
@@ -15,7 +14,6 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
-
 
 type AlignType = 'left' | 'right' | 'center';
 const RenderStatusBadge: React.FC<{ status: string }> = ({ status }) => {
@@ -38,9 +36,8 @@ const RefundView: React.FC = () => {
 
   const { error, refunds } = useRefunds({
     limit: 10,
-
   });
-
+  // console.log(refunds);
   let err: any = error;
   const refundTableColumns = useMemo(
     () => [
@@ -79,33 +76,33 @@ const RefundView: React.FC = () => {
       },
       {
         title: t('text-tracking-number'),
-        dataIndex: '',
-        key: 'pivot',
+        dataIndex: 'order',
+        key: 'order',
         align: 'center' as AlignType,
         className: '!text-sm',
         width: 160,
-        render: function renderTrackingNumber(pivot: any) {
-          return <p>{pivot?.order_id?.tracking_number || pivot}</p>;
+        render: function renderTrackingNumber(order: any) {
+          return <p>{order?.tracking_number || order}</p>;
         },
       },
       {
         title: t('text-amount'),
-        dataIndex: '',
-        key: 'amount',
+        dataIndex: 'order',
+        key: 'order',
         align: alignRight as AlignType,
         className: '!text-sm',
         width: 150,
-        render: function RenderPrice(pivot: any) {
+        render: function RenderPrice(order: any) {
           const { price } = usePrice({
-            amount: pivot?.order_id?.amount,
+            amount: order?.amount,
           });
           return <p>{price}</p>;
         },
       },
       {
         title: t('text-date'),
-        dataIndex: 'created_at',
-        key: 'created_at',
+        dataIndex: 'createdAt',
+        key: 'createdAt',
         align: 'center' as AlignType,
         className: '!text-sm',
         width: 160,
@@ -122,7 +119,7 @@ const RefundView: React.FC = () => {
       },
       {
         title: t('text-details'),
-        dataIndex: 'order_id',
+        dataIndex: 'order',
         key: 'order',
         align: 'center' as AlignType,
         className: '!text-sm',
@@ -150,7 +147,7 @@ const RefundView: React.FC = () => {
       <Table
         columns={refundTableColumns}
         data={refunds}
-        rowKey={(record: any) => record?.created_at}
+        rowKey={(record: any) => record?.createdAt}
         className="orderDetailsTable w-full border border-gray-200"
         scroll={{ x: 500, y: 700 }}
       />

@@ -73,7 +73,7 @@ const CreateRefund = () => {
   const { data } = useModalState();
   function handleRefundRequest({ title, description, images }: any) {
     createRefundRequest({
-      order_id: data,
+      order: data,
       title,
       description,
       images,
