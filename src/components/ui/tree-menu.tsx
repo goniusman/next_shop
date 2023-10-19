@@ -1,13 +1,13 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/router';
-import cn from 'classnames';
+import * as CategoryIcons from '@/components/icons/category';
 import { ExpandLessIcon } from '@/components/icons/expand-less-icon';
 import { ExpandMoreIcon } from '@/components/icons/expand-more-icon';
 import { getIcon } from '@/lib/get-icon';
-import * as CategoryIcons from '@/components/icons/category';
-import { useEffect, useState } from 'react';
 import { drawerAtom } from '@/store/drawer-atom';
+import cn from 'classnames';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 interface TreeMenuItemProps {
   item: any;
@@ -139,7 +139,7 @@ function TreeMenu({ items, className }: TreeMenuProps) {
   return (
     <ul className={cn('text-xs', className)}>
       {items?.map((item: any) => (
-        <TreeMenuItem key={`${item.name}${item.slug}`} item={item} />
+        <TreeMenuItem key={`${item._id}${item.slug}`} item={item} />
       ))}
     </ul>
   );
