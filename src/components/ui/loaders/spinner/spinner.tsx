@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import styles from './spinner.module.css';
-
+ 
 interface Props {
   className?: string;
   text?: string;
@@ -31,5 +31,23 @@ const Spinner = (props: Props) => {
     </>
   );
 };
+
+
+interface SpinnerPops {
+  className?: string;
+}
+
+export const SpinnerLoader = (props: SpinnerPops) => {
+  const { className } = props;
+  return (
+    <span
+      className={cn(
+        'inline-flex h-5 w-5 animate-spin rounded-full border-2 border-t-2 border-transparent border-t-accent',
+        className
+      )}
+    />
+  );
+};
+
 
 export default Spinner;

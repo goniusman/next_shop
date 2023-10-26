@@ -1,16 +1,17 @@
 import ProfileAddressGrid from '@/components/profile/profile-address';
-import Card from '@/components/ui/cards/card';
-import { useTranslation } from 'next-i18next';
-import ProfileForm from '@/components/profile/profile-form';
 import ProfileContact from '@/components/profile/profile-contact';
+import ProfileForm from '@/components/profile/profile-form';
+import ProfileUpdateEmail from '@/components/profile/profile-update-email';
 import Seo from '@/components/seo/seo';
+import Card from '@/components/ui/cards/card';
 import { useUser } from '@/framework/user';
 import DashboardLayout from '@/layouts/_dashboard';
+import { useTranslation } from 'next-i18next';
 export { getStaticProps } from '@/framework/general.ssr';
 
 const ProfilePage = () => {
   const { t } = useTranslation('common');
-  const { me } : any = useUser();
+  const { me }: any = useUser();
   if (!me) return null;
   return (
     <>
@@ -18,6 +19,7 @@ const ProfilePage = () => {
       <div className="w-full overflow-hidden px-1 pb-1">
         <div className="mb-8">
           <ProfileForm user={me} />
+          <ProfileUpdateEmail user={me} />
           <ProfileContact
             userId={me.id}
             profileId={me.profile?.id!}

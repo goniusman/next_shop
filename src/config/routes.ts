@@ -30,6 +30,10 @@ export const Routes = {
   author: (slug: string) => `/authors/${encodeURIComponent(slug)}`,
   manufacturers: '/manufacturers',
   manufacturer: (slug: string) => `/manufacturers/${encodeURIComponent(slug)}`,
+  nearByShop: ({ lat, lng }: { lat: string; lng: string }) =>
+  `/shops/search?lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(
+    lng
+  )}`,
   search: '/search',
   wishlists: '/wishlists',
   questions: '/questions',
