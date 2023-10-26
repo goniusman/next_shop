@@ -5,10 +5,14 @@ import Label from '@/components/ui/forms/label';
 import Radio from '@/components/ui/forms/radio/radio';
 import TextArea from '@/components/ui/forms/text-area';
 import { useModalState } from '@/components/ui/modal/modal.context';
+import { useSettings } from '@/framework/settings';
 import { useUpdateUser } from '@/framework/user';
 import { AddressType } from '@/framework/utils/constants';
 import { useTranslation } from 'next-i18next';
 import * as yup from 'yup';
+import GooglePlacesAutocomplete from '../form/google-places-autocomplete';
+import { Controller } from 'react-hook-form';
+import { GoogleMapLocation } from '@/types';
 
 type FormValues = {
   _id: any;
@@ -21,6 +25,7 @@ type FormValues = {
     zip: string;
     street_address: string;
   };
+  location: GoogleMapLocation;
 };
 
 const addressSchema = yup.object().shape({
@@ -44,7 +49,7 @@ export const AddressForm: React.FC<any> = ({
   isLoading,
 }) => {
   const { t } = useTranslation('common');
-
+  const { settings } = useSettings();
   return (
     <Form<FormValues>
       onSubmit={onSubmit}
@@ -57,7 +62,7 @@ export const AddressForm: React.FC<any> = ({
       }}
       resetValues={defaultValues}
     >
-      {({ register, formState: { errors } }) => (
+      {({ register, control, getValues, setValue, formState: { errors } }) => (
         <>
           <div>
             <Label>{t('text-type')}</Label>
@@ -66,7 +71,7 @@ export const AddressForm: React.FC<any> = ({
                 id="billing"
                 {...register('type')}
                 type="radio"
-                value={AddressType.Billing}
+                value={AddressType.Billing} 
                 label={t('text-billing')}
               />
               <Radio
@@ -87,6 +92,33 @@ export const AddressForm: React.FC<any> = ({
             className="col-span-2"
           />
 
+          {settings?.useGoogleMap && (
+              <div className="col-span-2">
+                <Label>{t('text-location')}</Label>
+                <Controller
+                  control={control}
+                  name="location"
+                  render={({ field: { onChange } }) => (
+                    <GooglePlacesAutocomplete
+                      register={register}
+                      // @ts-ignore
+                      onChange={(location: any) => {
+                        onChange(location);
+                        setValue('address.country', location?.country);
+                        setValue('address.city', location?.city);
+                        setValue('address.state', location?.state);
+                        setValue('address.zip', location?.zip);
+                        setValue(
+                          'address.street_address',
+                          location?.street_address
+                        );
+                      }}
+                      data={getValues('location')!}
+                    />
+                  )}
+                />
+              </div>
+            )}
           <Input
             label={t('text-country')}
             {...register('address.country')}

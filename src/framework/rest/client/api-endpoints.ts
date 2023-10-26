@@ -54,7 +54,7 @@ export const API_ENDPOINTS = {
   PAYMENT_INTENT: '/payment-intent',
   BEST_SELLING_PRODUCTS: '/best-selling-products',
   SEND_VERIFICATION_EMAIL: '/email/verification-notification',
-  USERS_UPDATE_EMAIL: '/update-email',
+  USERS_UPDATE_EMAIL: '/users/update-email',
   STORE_NOTICES: 'store-notices',
   NEAR_SHOPS: '/near-by-shop',
 };

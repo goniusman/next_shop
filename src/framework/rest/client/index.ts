@@ -21,6 +21,7 @@ import type {
   CreateRefundInput,
   CreateReviewInput,
   DownloadableFilePaginator,
+  EmailChangeResponse,
   Feedback,
   ForgotPasswordUserInput,
   GetParams,
@@ -57,6 +58,7 @@ import type {
   Settings,
   SettingsQueryOptions,
   Shop,
+  //@ts-ignore
   ShopMapLocation,
   ShopPaginator,
   ShopQueryOptions,
@@ -67,6 +69,7 @@ import type {
   TagQueryOptions,
   Type,
   TypeQueryOptions,
+  UpdateEmailUserInput,
   UpdateReviewInput,
   UpdateUserInput,
   User,
@@ -392,6 +395,11 @@ class Client {
     changePassword: (input: ChangePasswordUserInput) =>
       HttpClient.post<PasswordChangeResponse>(
         API_ENDPOINTS.USERS_CHANGE_PASSWORD,
+        input
+      ),
+    updateEmail: (input: UpdateEmailUserInput) =>
+      HttpClient.post<EmailChangeResponse>(
+        API_ENDPOINTS.USERS_UPDATE_EMAIL,
         input
       ),
     logout: () => HttpClient.post<boolean>(API_ENDPOINTS.USERS_LOGOUT, {}),

@@ -72,6 +72,28 @@ export const useDeleteAddress = () => {
   });
 };
 
+export const useUpdateEmail = () => {
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  return useMutation(client.users.updateEmail, {
+    onSuccess: (data) => {
+      if (data) {
+        toast.success(t('successfully-email-updated'));
+      }
+    },
+    onError: (error) => {
+      const {
+        response: { data },
+      }: any = error ?? {};
+
+      toast.error(data?.message);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.USERS_ME);
+    },
+  });
+};
+
 export const useUpdateUser = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
