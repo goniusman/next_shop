@@ -1,0 +1,36 @@
+name: Nodejs CI
+
+
+on:
+  push:
+    branches: [master]
+  pull_request: 
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: self-hosted 
+
+    steps:
+    # - name: 'Cleanup build folder'
+    #   run: sudo chown -R $USER:$USER /var/www/rest/_working/nest_rest
+      # run: |
+      #   ls -la ./
+      #   rm -rf ./* || true
+      #   rm -rf ./.??* || true
+      #   ls -la ./
+
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: |
+        npm i --force
+        npm run build:rest
+        pm2 stop 0
+        pm2 start 0
+        pm2 save 
+
+
+
