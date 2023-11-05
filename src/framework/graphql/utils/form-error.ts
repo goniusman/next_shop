@@ -1,5 +1,10 @@
 import Cookies from 'js-cookie';
-import Router from 'next/router';
+// import Router from 'next/router';
+import {useRouter} from 'next/router'
+const router = useRouter()
+
+
+
 
 export function getErrorMessage(error: any) {
   let processedError = {
@@ -22,7 +27,7 @@ export function getErrorMessage(error: any) {
       ) {
         Cookies.remove('auth_token');
         Cookies.remove('auth_permissions');
-        Router.push('/');
+        router.push('/');
       }
     }
   }
