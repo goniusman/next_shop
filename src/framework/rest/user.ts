@@ -322,7 +322,28 @@ export function useRegister() {
 
   return { mutate, isLoading, formError, setFormError };
 }
+export function useResendVerificationEmail() {
+  const { t } = useTranslation('common');
+  const { mutate, isLoading } = useMutation(
+    client.users.resendVerificationEmail,
+    {
+      onSuccess: (data) => {
+        if (data?.success) {
+          toast.success(t('PICKBAZAR_MESSAGE.EMAIL_SENT_SUCCESSFUL'));
+        }
+      },
+      onError: (error) => {
+        const {
+          response: { data },
+        }: any = error ?? {};
 
+        toast.error(data?.message);
+      },
+    }
+  );
+
+  return { mutate, isLoading };
+}
 export function useLogout() {
   const queryClient = useQueryClient();
   const { setToken } = useToken();

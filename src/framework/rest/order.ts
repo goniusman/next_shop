@@ -9,12 +9,14 @@ import {
   Order,
   OrderPaginator,
   OrderQueryOptions,
+  PaymentGateway,
   OrderStatusPaginator,
   QueryOptions,
+  CreateOrderPaymentInput,
 } from '@/types';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+
 import {
   useInfiniteQuery,
   useMutation,
@@ -25,6 +27,9 @@ import { toast } from 'react-toastify';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
 import { useUser } from './user';
+import { useTranslation } from 'react-i18next';
+import { isArray, isObject, isEmpty } from 'lodash';
+
 
 export function useOrders(options?: Partial<OrderQueryOptions>) {
   const { locale } = useRouter();
@@ -49,6 +54,7 @@ export function useOrders(options?: Partial<OrderQueryOptions>) {
     {
       getNextPageParam: ({ current_page, last_page }) =>
         last_page > current_page && { page: current_page + 1 },
+        refetchOnWindowFocus: false,
     }
   );
 
@@ -72,14 +78,17 @@ export function useOrders(options?: Partial<OrderQueryOptions>) {
 }
 
 export function useOrder({ tracking_number }: { tracking_number: string }) {
-  const { data, isLoading, error } = useQuery<Order, Error>(
+  const { data, isLoading, error,isFetching, refetch } = useQuery<Order, Error>(
     [API_ENDPOINTS.ORDERS, tracking_number],
-    () => client.orders.get(tracking_number)
+    () => client.orders.get(tracking_number),
+    { refetchOnWindowFocus: false }
   );
 
   return {
     order: data,
+    isFetching,
     isLoading,
+    refetch,
     error,
   };
 }
@@ -258,11 +267,34 @@ export function useCreateRefund() {
 export function useCreateOrder() {
   const router = useRouter();
   const { locale } = router;
+  const { t } = useTranslation();
 
   const { mutate: createOrder, isLoading } = useMutation(client.orders.create, {
-    onSuccess: (data) => {
-      if (data?.tracking_number) {
-        router.push(Routes.order(data?.tracking_number));
+    
+    onSuccess: ({ tracking_number, payment_gateway, payment_intent }) => {
+      console.log(
+        tracking_number,
+        payment_gateway,
+        payment_intent,
+        'create order'
+      );
+      if (tracking_number) {
+        if (
+          [
+            PaymentGateway.COD,
+            PaymentGateway.CASH,
+            PaymentGateway.FULL_WALLET_PAYMENT,
+          ].includes(payment_gateway as PaymentGateway)
+        ) {
+          return router.push(Routes.order(tracking_number));
+        }
+        if (payment_intent?.payment_intent_info?.is_redirect) {
+          return router.push(
+            payment_intent?.payment_intent_info?.redirect_url as string
+          );
+        } else {
+          return router.push(`${Routes.order(tracking_number)}/payment`);
+        }
       }
     },
     onError: (error) => {
@@ -277,6 +309,17 @@ export function useCreateOrder() {
     const formattedInputs = {
       ...input,
       language: locale,
+      invoice_translated_text: {
+        subtotal: t('order-sub-total'),
+        discount: t('order-discount'),
+        tax: t('order-tax'),
+        delivery_fee: t('order-delivery-fee'),
+        total: t('order-total'),
+        products: t('text-products'),
+        quantity: t('text-quantity'),
+        invoice_no: t('text-invoice-no'),
+        date: t('text-date'),
+      },
     };
     createOrder(formattedInputs);
   }
@@ -320,10 +363,14 @@ export function useVerifyOrder() {
 
   return useMutation(client.orders.verify, {
     onSuccess: (data) => {
-      if (data) {
+      // if (data?.errors as string) {
+      //   //@ts-ignore
+      //   toast.error(data?.errors[0]?.message);
+      // } else if (data) {
+        // FIXME
         //@ts-ignore
         setVerifiedResponse(data);
-      }
+      // }
     },
     onError: (error) => {
       const {
@@ -334,3 +381,152 @@ export function useVerifyOrder() {
     },
   });
 }
+
+
+export function useOrderPayment() {
+  const queryClient = useQueryClient();
+
+  const { mutate: createOrderPayment, isLoading } = useMutation(
+    client.orders.payment,
+    {
+      onSettled: (data) => {
+        queryClient.refetchQueries(API_ENDPOINTS.ORDERS);
+        queryClient.refetchQueries(API_ENDPOINTS.ORDERS_DOWNLOADS);
+      },
+      onError: (error) => {
+        const {
+          response: { data },
+        }: any = error ?? {};
+        toast.error(data?.message);
+      },
+    }
+  );
+
+  function formatOrderInput(input: CreateOrderPaymentInput) {
+    const formattedInputs = {
+      ...input,
+    };
+    createOrderPayment(formattedInputs);
+  }
+
+  return {
+    createOrderPayment: formatOrderInput,
+    isLoading,
+  };
+}
+
+export function useSavePaymentMethod() {
+  const {
+    mutate: savePaymentMethod,
+    isLoading,
+    error,
+    data,
+  } = useMutation(client.orders.savePaymentMethod);
+
+  return {
+    savePaymentMethod,
+    data,
+    isLoading,
+    error,
+  };
+}
+
+export function useGetPaymentIntentOriginal({
+  tracking_number,
+}: {
+  tracking_number: string;
+}) {
+  const router = useRouter();
+  const { openModal } = useModalAction();
+
+  const { data, isLoading, error, refetch } = useQuery(
+    [API_ENDPOINTS.PAYMENT_INTENT, { tracking_number }],
+    () => client.orders.getPaymentIntent({ tracking_number }),
+    // Make it dynamic for both gql and rest
+    {
+      enabled: false,
+      onSuccess: (data) => {
+        if (data?.payment_intent_info?.is_redirect) {
+          return router.push(data?.payment_intent_info?.redirect_url as string);
+        } else {
+          openModal('PAYMENT_MODAL', {
+            paymentGateway: data?.payment_gateway,
+            paymentIntentInfo: data?.payment_intent_info,
+            trackingNumber: data?.tracking_number,
+          });
+        }
+      },
+    }
+  );
+
+  return {
+    data,
+    getPaymentIntentQueryOriginal: refetch,
+    isLoading,
+    error,
+  };
+}
+
+export function useGetPaymentIntent({
+  tracking_number,
+  payment_gateway,
+  recall_gateway,
+  form_change_gateway,
+}: {
+  tracking_number: string;
+  payment_gateway: string;
+  recall_gateway?: boolean;
+  form_change_gateway?: boolean;
+}) {
+  const router = useRouter();
+  const { openModal, closeModal } = useModalAction();
+
+  const { data, isLoading, error, refetch, isFetching } = useQuery(
+    [
+      API_ENDPOINTS.PAYMENT_INTENT,
+      { tracking_number, payment_gateway, recall_gateway },
+    ],
+    () =>
+      client.orders.getPaymentIntent({
+        tracking_number,
+        payment_gateway,
+        recall_gateway,
+      }),
+    // Make it dynamic for both gql and rest
+    {
+      enabled: false,
+      onSuccess: (item) => {
+        let data: any = '';
+        if (isArray(item)) {
+          data = { ...item };
+          data = isEmpty(data) ? [] : data[0];
+        } else if (isObject(item)) {
+          data = item;
+        }
+        if (data?.payment_intent_info?.is_redirect) {
+          return router.push(data?.payment_intent_info?.redirect_url as string);
+        } else {
+          if (recall_gateway) window.location.reload();
+          openModal('PAYMENT_MODAL', {
+            paymentGateway: data?.payment_gateway,
+            paymentIntentInfo: data?.payment_intent_info,
+            trackingNumber: data?.tracking_number,
+          });
+        }
+      },
+    }
+  );
+
+  return {
+    data,
+    getPaymentIntentQuery: refetch,
+    isLoading,
+    fetchAgain: isFetching,
+    error,
+  };
+}
+
+
+
+
+
