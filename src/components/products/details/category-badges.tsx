@@ -1,5 +1,7 @@
 import { useTranslation } from 'next-i18next';
-import Router from 'next/router';
+// import Router from 'next/router';
+import {useRouter} from 'next/router'
+const Router = useRouter()
 interface Props {
   categories: any;
   basePath: string;

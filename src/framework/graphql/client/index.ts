@@ -12,7 +12,9 @@ import Cookies from 'js-cookie';
 import deepMerge from 'deepmerge';
 import isEqual from 'lodash/isEqual';
 import { AUTH_TOKEN_KEY } from '@/lib/constants';
-import Router from 'next/router';
+// import Router from 'next/router';
+import {useRouter} from 'next/router'
+const Router = useRouter()
 import type { AppProps } from 'next/app';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
