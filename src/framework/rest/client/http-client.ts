@@ -3,7 +3,7 @@ import type { SearchParamOptions } from '@/types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 // import Router from 'next/router';
-import {useRouter} from 'next/router'
+// import {useRouter} from 'next/router'
 
 
 const Axios = axios.create({
@@ -27,7 +27,7 @@ Axios.interceptors.request.use((config) => {
 Axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    const Router = useRouter()
+    // const Router = useRouter()
     if (
       (error.response && error.response.status === 401) ||
       (error.response && error.response.status === 403) ||
@@ -35,7 +35,7 @@ Axios.interceptors.response.use(
         error.response.data.message === 'PICKBAZAR_ERROR.NOT_AUTHORIZED')
     ) {
       Cookies.remove(AUTH_TOKEN_KEY);
-      Router.reload();
+      // Router.reload();
     }
     return Promise.reject(error);
   }
