@@ -14,7 +14,7 @@ import isEqual from 'lodash/isEqual';
 import { AUTH_TOKEN_KEY } from '@/lib/constants';
 // import Router from 'next/router';
 import {useRouter} from 'next/router'
-const Router = useRouter()
+
 import type { AppProps } from 'next/app';
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
@@ -31,6 +31,7 @@ function mergePagination(existing: any, incoming: any) {
 }
 
 function createApolloClient() {
+const Router = useRouter()  
   const authLink = setContext((_, { headers }) => {
     const token = Cookies.get(AUTH_TOKEN_KEY);
     //TODO: log headers to see if cookies are being sent

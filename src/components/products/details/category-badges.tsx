@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next';
 // import Router from 'next/router';
 import {useRouter} from 'next/router'
-const Router = useRouter()
+
 interface Props {
   categories: any;
   basePath: string;
@@ -10,7 +10,7 @@ interface Props {
 
 const CategoryBadges = ({ onClose, categories, basePath }: Props) => {
   const { t } = useTranslation('common');
-
+const Router = useRouter()
   const handleClick = (path: string) => {
     Router.push(path);
     if (onClose) {

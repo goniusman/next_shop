@@ -2,9 +2,9 @@ import { AUTH_TOKEN_KEY } from '@/lib/constants';
 import type { SearchParamOptions } from '@/types';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-// import Router from 'next/router';
-import {useRouter} from 'next/router'
-const Router = useRouter()
+import Router from 'next/router';
+// import {useRouter} from 'next/router'
+// const Router = useRouter()
 
 const Axios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_REST_API_ENDPOINT,

@@ -1,12 +1,13 @@
 import Cookies from 'js-cookie';
 // import Router from 'next/router';
 import {useRouter} from 'next/router'
-const Router = useRouter()
+
 
 
 
 
 export function getErrorMessage(error: any) {
+  const Router = useRouter()
   let processedError = {
     message: '',
     validation: [],

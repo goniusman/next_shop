@@ -1,6 +1,6 @@
 // import Router from 'next/router';
 import {useRouter} from 'next/router'
-const Router = useRouter()
+
 import { useTranslation } from 'next-i18next';
 interface Props {
   tags: any;
@@ -10,7 +10,7 @@ interface Props {
 
 const TagGroups = ({ onClose, tags, basePath }: Props) => {
   const { t } = useTranslation('common');
-
+const Router = useRouter()
   const handleClick = (path: string) => {
     Router.push(path);
     if (onClose) {
