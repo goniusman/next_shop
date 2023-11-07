@@ -26,7 +26,7 @@ const Router = useRouter()
         {categories?.map((category: any) => (
           <button
             onClick={() => handleClick(`${basePath}?category=${category.slug}`)}
-            key={category.id}
+            key={category._id}
             className="mb-2 whitespace-nowrap rounded border border-border-200 bg-transparent py-1 px-2.5 text-sm lowercase tracking-wider text-heading transition-colors hover:border-accent hover:text-accent focus:bg-opacity-100 focus:outline-none ltr:mr-2 rtl:ml-2"
           >
             {category.name}
