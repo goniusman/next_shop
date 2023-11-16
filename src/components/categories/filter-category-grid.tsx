@@ -1,15 +1,12 @@
-import cn from 'classnames';
-import NotFound from '@/components/ui/not-found';
-import CategoriesLoader from '@/components/ui/loaders/categories-loader';
+import ProductGridHome from '@/components/products/grids/home';
 import CategoryCard from '@/components/ui/category-card';
-import { useRouter } from 'next/router';
-import CategoryBreadcrumb from '@/components/ui/category-breadcrumb-card';
-import Scrollbar from '@/components/ui/scrollbar';
-import isEmpty from 'lodash/isEmpty';
-import { useTranslation } from 'next-i18next';
+import CategoriesLoader from '@/components/ui/loaders/categories-loader';
+import NotFound from '@/components/ui/not-found';
 import findNestedData from '@/lib/find-nested-data';
 import type { Category } from '@/types';
-import ProductGridHome from '@/components/products/grids/home';
+import isEmpty from 'lodash/isEmpty';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 
 function findParentCategories(
   treeItems: any[],
@@ -93,7 +90,8 @@ const FilterCategoryGrid: React.FC<FilterCategoryGridProps> = ({
     <div className="bg-light">
       <div className="px-3 pt-3 md:px-6 md:pt-6 lg:px-10 lg:pt-10 2xl:px-14 2xl:pt-14">
         {query?.category ? (
-          <Scrollbar className="w-full">
+          <>
+            {/* <Scrollbar className="w-full">
             <div
               className={cn('px-2 pt-2 pb-7', {
                 'mb-8 divide-dashed border-b border-dashed border-gray-200':
@@ -104,7 +102,8 @@ const FilterCategoryGrid: React.FC<FilterCategoryGridProps> = ({
                 categories={[...parentCategories, selectedCategory]}
               />
             </div>
-          </Scrollbar>
+          </Scrollbar> */}
+          </>
         ) : (
           <h3 className="mb-8 px-2 pt-2 text-2xl font-semibold text-heading">
             {t('text-all-categories')}

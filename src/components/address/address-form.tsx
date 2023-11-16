@@ -178,6 +178,7 @@ export default function CreateOrUpdateAddressForm() {
 
   function onSubmit(values: FormValues) {
     const formattedInput = {
+      _id: values._id,
       id: Math.floor(Math.random() * 100) + Date.now(),
       customer: customerId,
       title: values.title,
@@ -185,6 +186,7 @@ export default function CreateOrUpdateAddressForm() {
       address: {
         ...values.address,
       },
+      location: values.location,
     };
     updateProfile({
       id: customerId,

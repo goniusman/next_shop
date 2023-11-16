@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 
 interface Props {
+  children: React.ReactNode;
   values: string[];
   onChange: (value: string[]) => void;
 }

@@ -1,16 +1,16 @@
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import { RadioGroup } from '@headlessui/react';
-import { useAtom, WritableAtom } from 'jotai';
-import { useEffect } from 'react';
 import AddressCard from '@/components/address/address-card';
 import { AddressHeader } from '@/components/address/address-header';
-import { useTranslation } from 'next-i18next';
+import { useModalAction } from '@/components/ui/modal/modal.context';
 import type { Address } from '@/types';
+import { RadioGroup } from '@headlessui/react';
+import { useAtom, WritableAtom } from 'jotai';
+import { useTranslation } from 'next-i18next';
+import { useEffect } from 'react';
 
 interface AddressesProps {
   addresses: Address[] | undefined | null;
   label: string;
-  atom: WritableAtom<Address | null, Address>;
+  atom: WritableAtom<Address | null, any, Address>;
   className?: string;
   userId: string;
   count: number;
@@ -56,7 +56,7 @@ export const AddressGrid: React.FC<AddressesProps> = ({
       <AddressHeader onAdd={onAdd} count={count} label={label} />
       {!addresses?.length ? (
         <div className="grid grid-cols-1 gap-4">
-          <span className="relative px-5 py-6 text-base text-center bg-gray-100 border rounded border-border-200">
+          <span className="relative rounded border border-border-200 bg-gray-100 px-5 py-6 text-center text-base">
             {t('text-no-address')}
           </span>
         </div>

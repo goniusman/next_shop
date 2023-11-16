@@ -1,8 +1,4 @@
-import { Swiper, SwiperSlide, Pagination } from '@/components/ui/slider';
-import { Image } from '@/components/ui/image';
-import { productPlaceholder } from '@/lib/placeholders';
-import Link from '@/components/ui/link';
-import { Routes } from '@/config/routes';
+import { Pagination, Swiper, SwiperSlide } from '@/components/ui/slider';
 import type { Banner } from '@/types';
 
 interface BannerProps {
@@ -34,7 +30,7 @@ const BannerWithPagination: React.FC<BannerProps> = ({ banners, slug }) => {
           >
             {banners?.map((banner, idx) => (
               <SwiperSlide key={idx}>
-                <Link href={`/${slug}${Routes.search}`}>
+                {/* <Link href={`/${slug}${Routes.search}`}>
                   <div className="relative h-full max-h-[240px] w-full md:max-h-[610px]">
                     <Image
                       className="h-full w-full"
@@ -45,7 +41,7 @@ const BannerWithPagination: React.FC<BannerProps> = ({ banners, slug }) => {
                       height={610}
                     />
                   </div>
-                </Link>
+                </Link> */}
               </SwiperSlide>
             ))}
           </Swiper>

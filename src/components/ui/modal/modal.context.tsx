@@ -27,7 +27,6 @@ type MODAL_VIEWS =
   | 'USE_SAVED_CARD'
   | 'GATEWAY_MODAL';
 
-
 interface State {
   view?: MODAL_VIEWS;
   data?: any;
@@ -71,7 +70,9 @@ const ModalActionContext = React.createContext<
 >(undefined);
 ModalActionContext.displayName = 'ModalActionContext';
 
-export const ModalProvider: React.FC = ({ children }) => {
+export const ModalProvider: React.FC<{ children?: React.ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = React.useReducer(modalReducer, initialState);
   return (
     <ModalStateContext.Provider value={state}>

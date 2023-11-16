@@ -28,7 +28,7 @@ export function useSettings() {
   // console.log(typeof data);
   // console.log(data.length);
   return {
-    settings: data && data.length > 0 ? data[0].options : {},
+    settings: data && data.length > 0 ? data[0]?.options : {},
     isLoading,
     error,
   };

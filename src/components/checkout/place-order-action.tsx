@@ -16,7 +16,10 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
+export const PlaceOrderAction: React.FC<{
+  className?: string;
+  children?: React.ReactNode;
+}> = (props) => {
   const { t } = useTranslation('common');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { createOrder, isLoading } = useCreateOrder();
@@ -48,7 +51,7 @@ export const PlaceOrderAction: React.FC<{ className?: string }> = (props) => {
     setErrorMessage(null);
   }, [payment_gateway]);
   // console.log(items);
-  
+
   const available_items = items?.filter(
     (item) => !verified_response?.unavailable_products?.includes(item._id)
   );

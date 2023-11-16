@@ -1,10 +1,10 @@
-import Logo from '@/components/ui/logo';
-import { useAtom } from 'jotai';
-import { drawerAtom } from '@/store/drawer-atom';
 import { CloseIcon } from '@/components/icons/close-icon';
+import Logo from '@/components/ui/logo';
+import { drawerAtom } from '@/store/drawer-atom';
+import { useAtom } from 'jotai';
 import { useTranslation } from 'next-i18next';
 
-const DrawerWrapper: React.FC = ({ children }) => {
+const DrawerWrapper = ({ children }: { children?: React.ReactNode }) => {
   const { t } = useTranslation('common');
   const [_, closeSidebar] = useAtom(drawerAtom);
   return (

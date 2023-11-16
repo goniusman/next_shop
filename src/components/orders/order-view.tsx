@@ -26,6 +26,7 @@ function OrderView({ order, language }: any) {
 
   useEffect(() => {
     resetCart();
+    //@ts-ignore
     resetCheckout();
   }, [resetCart, resetCheckout]);
 

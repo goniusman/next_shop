@@ -562,8 +562,8 @@ enum RefundStatus {
 }
 
 export interface Address {
-  id: string;
-  _id: any;
+  id: any;
+  _id?: any;
   title: string;
   type: any;
   address: {

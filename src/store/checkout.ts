@@ -24,7 +24,7 @@ interface CheckoutState {
   coupon: Coupon | null;
   payable_amount: number;
   use_wallet: boolean;
-  [key: string]: unknown;
+  [key: string]: any;
 }
 export const defaultCheckout: CheckoutState = {
   billing_address: null,

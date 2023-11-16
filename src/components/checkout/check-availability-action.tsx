@@ -1,20 +1,21 @@
-import { formatOrderedProduct } from '@/lib/format-ordered-product';
-import { useAtom } from 'jotai';
-import { billingAddressAtom, shippingAddressAtom } from '@/store/checkout';
 import Button from '@/components/ui/button';
+import { useVerifyOrder } from '@/framework/order';
+import { formatOrderedProduct } from '@/lib/format-ordered-product';
+import { billingAddressAtom, shippingAddressAtom } from '@/store/checkout';
 import { useCart } from '@/store/quick-cart/cart.context';
 import classNames from 'classnames';
-import { useVerifyOrder } from '@/framework/order';
+import { useAtom } from 'jotai';
 import omit from 'lodash/omit';
 
-export const CheckAvailabilityAction: React.FC<{ className?: string }> = (
-  props
-) => {
+export const CheckAvailabilityAction: React.FC<{
+  className?: string;
+  children?: React.ReactNode;
+}> = (props) => {
   const [billing_address] = useAtom(billingAddressAtom);
   const [shipping_address] = useAtom(shippingAddressAtom);
   const { items, total, isEmpty } = useCart();
 
-  const { mutate: verifyCheckout, isLoading: loading } : any = useVerifyOrder();
+  const { mutate: verifyCheckout, isLoading: loading }: any = useVerifyOrder();
 
   function handleVerifyCheckout() {
     verifyCheckout({

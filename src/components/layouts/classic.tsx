@@ -1,10 +1,10 @@
 import Banner from '@/components/banners/banner';
-import PromotionSliders from '@/components/promotions/promotions';
 import Categories from '@/components/categories/categories';
+import ProductGridHome from '@/components/products/grids/home';
+import PromotionSliders from '@/components/promotions/promotions';
+import type { HomePageProps } from '@/types';
 import { Element } from 'react-scroll';
 import FilterBar from './filter-bar';
-import ProductGridHome from '@/components/products/grids/home';
-import type { HomePageProps } from '@/types';
 
 export default function ClassicLayout({ variables }: HomePageProps) {
   return (

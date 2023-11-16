@@ -1,15 +1,15 @@
-import type { Address } from '@/types';
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import { RadioGroup } from '@headlessui/react';
-import { useAtom, WritableAtom } from 'jotai';
 import AddressCard from '@/components/address/address-card';
 import { AddressHeader } from '@/components/address/address-header';
+import { useModalAction } from '@/components/ui/modal/modal.context';
+import type { Address } from '@/types';
+import { RadioGroup } from '@headlessui/react';
+import { useAtom, WritableAtom } from 'jotai';
 import { useTranslation } from 'next-i18next';
 
 interface AddressesProps {
   addresses: Address[] | undefined;
   label: string;
-  atom: WritableAtom<Address | null, Address>;
+  atom: WritableAtom<Address | null, any, Address>;
   className?: string;
   count: number;
   type: string;

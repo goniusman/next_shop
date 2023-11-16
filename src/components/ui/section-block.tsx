@@ -1,11 +1,12 @@
+import Link from '@/components/ui/link';
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
-import Link from '@/components/ui/link';
 
 type SectionProps = {
   className?: any;
   title?: string;
   href?: string;
+  children?: React.ReactNode;
 };
 
 /**
@@ -25,21 +26,21 @@ const SectionBlock: React.FC<SectionProps> = ({
   return (
     <div
       className={cn(
-        'w-full flex pb-[40px] xl:pb-[54px] 3xl:pb-[60px] px-7 xl:px-16 flex-col',
+        'flex w-full flex-col px-7 pb-[40px] xl:px-16 xl:pb-[54px] 3xl:pb-[60px]',
         className
       )}
     >
       {title && (
-        <div className="flex items-center justify-between mb-7 ">
+        <div className="mb-7 flex items-center justify-between ">
           {title && (
-            <h3 className="text-2xl lg:text-[27px] 3xl:text-3xl font-semibold">
+            <h3 className="text-2xl font-semibold lg:text-[27px] 3xl:text-3xl">
               {t(title)}
             </h3>
           )}
           {href && (
             <Link
               href={href}
-              className="text-base font-semibold justify-end transition-colors hover:text-orange-500"
+              className="justify-end text-base font-semibold transition-colors hover:text-orange-500"
             >
               {t('text-see-all')}
             </Link>

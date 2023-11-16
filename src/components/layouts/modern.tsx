@@ -1,9 +1,9 @@
 import Banner from '@/components/banners/banner';
 import Categories from '@/components/categories/categories';
-import { Element } from 'react-scroll';
 import ProductGridHome from '@/components/products/grids/home';
-import FilterBar from './filter-bar';
 import type { HomePageProps } from '@/types';
+import { Element } from 'react-scroll';
+import FilterBar from './filter-bar';
 
 export default function Modern({ variables }: HomePageProps) {
   return (
