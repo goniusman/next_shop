@@ -27,7 +27,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: |
         npm i --force
-        npm run postbuild:rest
         npm run prepare
         npm run build
         pm2 stop 0
