@@ -27,10 +27,12 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: |
         npm i --force
-        npm run dev:rest
+        npm run postbuild:rest
+        npm run prepare
+        npm run build
         pm2 stop 0
         pm2 start 0
         pm2 save 
-
+        sudo service nginx restart
 
 
