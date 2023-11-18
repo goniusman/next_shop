@@ -18,7 +18,7 @@ module.exports = withPWA({
       'localhost',
       '127.0.0.1',
       'i.pravatar.cc',
-      'res.cloudinary.com'
+      'res.cloudinary.com',
     ],
   },
   ...(process.env.FRAMEWORK_PROVIDER === 'graphql' && {

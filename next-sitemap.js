@@ -1,7 +1,7 @@
 module.exports = {
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://36.255.70.224:33',
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL,
   generateRobotsTxt: true, // (optional)
-  sitemapSize: 7000,
+  // sitemapSize: 7000,
   robotsTxtOptions: {
     policies: [
       {

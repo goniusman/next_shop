@@ -12,7 +12,7 @@
     "build:gql": "yarn codegen && next build",
     "start": "next start",
     "lint": "next lint",
-    "postbuild:rest": "next-sitemap",
+    "postbuild:rest": "next-sitemap --config next-sitemap",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -32,7 +32,7 @@
     "dayjs": "1.11.7",
     "deepmerge": "4.3.0",
     "framer-motion": "10.1.0",
-    "i18next": "22.4.11",
+    "i18next": "^22.4.11",
     "jotai": "2.0.3",
     "js-cookie": "3.0.1",
     "little-state-machine": "4.8.0",
@@ -57,7 +57,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "14.2.3",
     "react-hook-form": "7.43.5",
-    "react-i18next": "12.2.0",
+    "react-i18next": "^12.2.0",
     "react-otp-input": "2.4.0",
     "react-phone-input-2": "2.15.1",
     "react-query": "3.39.3",
