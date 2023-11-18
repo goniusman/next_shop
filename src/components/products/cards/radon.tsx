@@ -1,11 +1,11 @@
-import Link from '@/components/ui/link';
 import { Image } from '@/components/ui/image';
-import cn from 'classnames';
-import { useTranslation } from 'next-i18next';
+import Link from '@/components/ui/link';
 import { Routes } from '@/config/routes';
-import { Product } from '@/types';
 import { productPlaceholder } from '@/lib/placeholders';
 import usePrice from '@/lib/use-price';
+import { Product } from '@/types';
+import cn from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 type RadonProps = {
   product: Product;
@@ -35,7 +35,11 @@ const Radon: React.FC<RadonProps> = ({ product, className }) => {
         className
       )}
     >
-      <Link href={Routes.product(slug)} className="cursor-pointer">
+      <Link
+        href={Routes.product(slug)}
+        className="cursor-pointer"
+        legacyBehavior
+      >
         <Image
           src={image?.original ?? productPlaceholder}
           alt={name}

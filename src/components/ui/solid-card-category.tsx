@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@/lib/locals';
-import { ArrowPrevIcon } from '@/components/icons/arrow-prev';
 import { ArrowNextIcon } from '@/components/icons/arrow-next';
-import { Swiper, SwiperSlide, Navigation } from '@/components/ui/slider';
-import { productPlaceholder } from '@/lib/placeholders';
+import { ArrowPrevIcon } from '@/components/icons/arrow-prev';
 import { Image } from '@/components/ui/image';
+import { Navigation, Swiper, SwiperSlide } from '@/components/ui/slider';
+import { useIsRTL } from '@/lib/locals';
+import { productPlaceholder } from '@/lib/placeholders';
+import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 import Link from './link';
 
 interface CategoryItemProps {
@@ -13,8 +13,11 @@ interface CategoryItemProps {
 }
 const CategoryItem: React.FC<CategoryItemProps> = ({ item }) => {
   return (
-    <div className="relative overflow-hidden text-center cursor-pointer group">
-      <Link href={`/${item?.type?.slug}/search/?category=${item.slug}`}>
+    <div className="group relative cursor-pointer overflow-hidden text-center">
+      <Link
+        href={`/${item?.type?.slug}/search/?category=${item.slug}`}
+        legacyBehavior
+      >
         <Image
           src={item?.image?.original! ?? productPlaceholder}
           alt={item?.name!}
@@ -24,7 +27,7 @@ const CategoryItem: React.FC<CategoryItemProps> = ({ item }) => {
           className="rounded-md"
         />
       </Link>
-      <span className="block mt-2 text-base font-semibold transition-colors text-heading group-hover:text-orange-500 ltr:text-left rtl:text-right">
+      <span className="mt-2 block text-base font-semibold text-heading transition-colors group-hover:text-orange-500 ltr:text-left rtl:text-right">
         {item.name}
       </span>
     </div>
@@ -95,14 +98,14 @@ function SolidCardCategory({ items }: any) {
       </Swiper>
       <div
         ref={(node) => setPrevEl(node)}
-        className="absolute z-10 flex items-center justify-center w-8 h-8 -mt-4 rounded-full outline-none cursor-pointer banner-slider-prev text-heading bg-light shadow-300 top-1/2 ltr:-left-4 rtl:-right-4 focus:outline-none transition-colors hover:text-orange-500"
+        className="banner-slider-prev absolute top-1/2 z-10 -mt-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-light text-heading shadow-300 outline-none transition-colors hover:text-orange-500 focus:outline-none ltr:-left-4 rtl:-right-4"
       >
         <span className="sr-only">{t('text-previous')}</span>
         {isRTL ? <ArrowNextIcon /> : <ArrowPrevIcon />}
       </div>
       <div
         ref={(node) => setNextEl(node)}
-        className="absolute z-10 flex items-center justify-center w-8 h-8 -mt-4 rounded-full outline-none cursor-pointer banner-slider-next text-heading bg-light shadow-300 top-1/2 ltr:-right-4 rtl:-left-4 focus:outline-none transition-colors hover:text-orange-500"
+        className="banner-slider-next absolute top-1/2 z-10 -mt-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-light text-heading shadow-300 outline-none transition-colors hover:text-orange-500 focus:outline-none ltr:-right-4 rtl:-left-4"
       >
         <span className="sr-only">{t('text-next')}</span>
         {isRTL ? <ArrowPrevIcon /> : <ArrowNextIcon />}

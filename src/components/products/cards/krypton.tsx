@@ -1,10 +1,10 @@
-import Link from '@/components/ui/link';
 import { Image } from '@/components/ui/image';
-import cn from 'classnames';
-import usePrice from '@/lib/use-price';
-import { useTranslation } from 'next-i18next';
+import Link from '@/components/ui/link';
 import { Routes } from '@/config/routes';
 import { productPlaceholder } from '@/lib/placeholders';
+import usePrice from '@/lib/use-price';
+import cn from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 type KryptonProps = {
   product: any;
@@ -27,7 +27,7 @@ const Krypton: React.FC<KryptonProps> = ({ product, className }) => {
   });
 
   return (
-    <Link href={Routes.product(slug)}>
+    <Link href={Routes.product(slug)} legacyBehavior>
       <article
         className={cn(
           'product-card cart-type-krypton h-full cursor-pointer overflow-hidden rounded border border-border-200 bg-light transition-shadow duration-200 hover:shadow-sm',

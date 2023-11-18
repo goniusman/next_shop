@@ -1,19 +1,17 @@
-import React, { useEffect, useState } from 'react';
 import Button from '@/components/ui/button';
+import { useModalAction } from '@/components/ui/modal/modal.context';
+import { Routes } from '@/config/routes';
+import { useOrderPayment } from '@/framework/order';
+import { PaymentGateway, PaymentIntentInfo } from '@/types';
 import {
   PaymentElement,
-  LinkAuthenticationElement,
-  useStripe,
   useElements,
+  useStripe,
 } from '@stripe/react-stripe-js';
-import { Routes } from '@/config/routes';
-import Spinner from '@/components/ui/loaders/spinner/spinner';
 import { StripePaymentElementOptions } from '@stripe/stripe-js';
-import { PaymentGateway, PaymentIntentInfo } from '@/types';
-import { useModalAction } from '@/components/ui/modal/modal.context';
-import { useOrderPayment } from '@/framework/order';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 interface Props {
   paymentIntentInfo: PaymentIntentInfo;
@@ -115,7 +113,7 @@ export default function StripeElementBaseForm({
 
     setIsLoading(false);
   };
- 
+
   const paymentElementOptions = {
     layout: 'tabs',
     defaultCollapsed: false,
