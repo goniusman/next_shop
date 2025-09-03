@@ -1,0 +1,67 @@
+name: CI/CD to Production
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  ci-cd:
+    name: Build and Deploy to Production
+    runs-on: [self-hosted, production, shop]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Fix permissions on GitHub workspace
+        run: |
+          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+          sudo chmod -R 777 $GITHUB_WORKSPACE
+      
+      - name: Set dynamic image tag
+        run: echo "IMAGE_TAG=production-$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build new app image
+        run: docker build -t shop_bazar:$IMAGE_TAG -f Dockerfile .
+
+      - name: Make deployment scripts executable
+        run: chmod +x ./deploy-blue-green-prod.sh 
+
+      - name: Run Blue-Green Deployment
+        run: |
+          echo "Deploying app with image tag: $IMAGE_TAG"
+          export IMAGE_TAG=$IMAGE_TAG
+          ./deploy-blue-green-prod.sh
+
+      - name: Confirm deployed container is running
+        run: docker ps | grep shop_bazar || echo "No active app container found" 
+
+      - name: Prune old Docker images (keep latest 3)
+        run: |
+          docker images --format "{{.Repository}}:{{.Tag}} {{.CreatedAt}}" \
+            | grep "^shop_bazar:production-" \
+            | sort -k2 -r | tail -n +4 | awk '{print $1}' | xargs -r docker rmi
+
+    #   - name: Prune stopped containers /// do not run this
+    #     run: docker container prune -f
+
+      - name: Prune dangling volumes
+        run: docker volume prune -f
+
+      - name: Prune unused networks
+        run: docker network prune -f
+
+      - name: Prune build cache layers
+        run: docker builder prune -f
+
+      - name: Prune dangling (untagged) images
+        run: docker image prune -f
+
+      # - name: Prune everything unused (safe for CI)
+      #   run: docker system prune -af --volumes
+      
+

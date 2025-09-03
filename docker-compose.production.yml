@@ -1,0 +1,35 @@
+services:
+
+  shop_bazar_blue:
+    image: shop_bazar:${IMAGE_TAG:-local}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "3004"
+    env_file:
+      - .env.production
+    environment:
+      - PORT=3004
+    restart: always
+    networks:
+      - admin
+
+  shop_bazar_green:
+    image: shop_bazar:${IMAGE_TAG:-local}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - "3004"
+    env_file:
+      - .env.production
+    environment:
+      - PORT=3004
+    restart: always
+    networks:
+      - admin
+
+networks:
+  admin:
+    driver: bridge
