@@ -49,13 +49,17 @@ fi
 # -------------------------------
 # UPDATE NGINX
 # -------------------------------
-echo "🔄 Switching NGINX to $INACTIVE ($CONTAINER_IP)"
+echo "Switching NGINX to $INACTIVE ($CONTAINER_IP)"
 export ACTIVE_APP=$CONTAINER_IP
-envsubst '${ACTIVE_APP}' < $NGINX_TEMPLATE > shop.conf
-sudo mv shop.conf $NGINX_CONF
-sudo ln -sf $NGINX_CONF /etc/nginx/sites-enabled/shop.conf
+echo "ACTIVE_APP=$ACTIVE_APP"
+
+envsubst '${ACTIVE_APP}' < ./nginx/nginx.conf > shop.conf
+sudo mv shop.conf /etc/nginx/sites-available/shop.conf
+sudo ln -sf /etc/nginx/sites-available/shop.conf /etc/nginx/sites-enabled/shop.conf
+
 sudo nginx -t
 sudo systemctl reload nginx
+
 
 # -------------------------------
 # STOP & REMOVE OLD CONTAINER
