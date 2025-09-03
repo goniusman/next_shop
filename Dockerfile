@@ -30,6 +30,6 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/next-i18next.config.js ./next-i18next.config.js
 
-EXPOSE 3003
+EXPOSE 3004
 
 CMD ["npm", "run", "start"]
