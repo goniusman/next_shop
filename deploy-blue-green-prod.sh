@@ -2,94 +2,94 @@
 
 set -e
 
-# Validate required IMAGE_TAG
-if [ -z "$IMAGE_TAG" ]; then
-  echo "❌ ERROR: IMAGE_TAG is not set. Aborting."
-  exit 1
-fi
+# -------------------------------
+# CONFIGURATION
+# -------------------------------
+IMAGE_TAG=${IMAGE_TAG:?IMAGE_TAG is not set. Aborting.}
+APP_NAME="shop_bazar"
+HEALTH_PORT=${HEALTH_PORT:-3004}  # Change this if needed
+HEALTH_PATH=${HEALTH_PATH:-/health}
+NGINX_TEMPLATE="./nginx/nginx.conf"
+NGINX_CONF="/etc/nginx/sites-available/shop.conf"
 
-# Determine active and inactive service
-# GREEN_PORT=3004
-# BLUE_PORT=3005
-if docker compose -f docker-compose.production.yml -p shop_bazar ps | grep -q shop_bazar_blue; then
-  ACTIVE="shop_bazar_blue"
-  INACTIVE="shop_bazar_green"
-#   ACTIVE_PORT=$GREEN_PORT
-#   TARGET_PORT=$BLUE_PORT
+# -------------------------------
+# DETERMINE ACTIVE & INACTIVE
+# -------------------------------
+if docker compose -f docker-compose.production.yml -p $APP_NAME ps | grep -q "${APP_NAME}_blue"; then
+    ACTIVE="${APP_NAME}_blue"
+    INACTIVE="${APP_NAME}_green"
 else
-  ACTIVE="shop_bazar_green"
-  INACTIVE="shop_bazar_blue"
-#   ACTIVE_PORT=$BLUE_PORT
-#   TARGET_PORT=$GREEN_PORT
+    ACTIVE="${APP_NAME}_green"
+    INACTIVE="${APP_NAME}_blue"
 fi
 
 echo "🔁 Active: $ACTIVE"
 echo "🚀 Deploying to: $INACTIVE with image tag: $IMAGE_TAG"
 
+# -------------------------------
+# START INACTIVE CONTAINER
+# -------------------------------
+docker compose -f docker-compose.production.yml -p $APP_NAME up -d --no-deps --force-recreate \
+    --scale $INACTIVE=1 --build $INACTIVE
 
-# Start inactive app container (using already built image)
-echo "⏳ Starting $INACTIVE with new image..."
-docker compose -f docker-compose.production.yml -p shop_bazar up -d --no-deps --force-recreate \
-  --scale $INACTIVE=1 $INACTIVE
-
-# Health check
-echo "🔍 Checking health on $INACTIVE.."
+# -------------------------------
+# HEALTH CHECK LOOP
+# -------------------------------
+echo "🔍 Checking health on $INACTIVE..."
 CONTAINER_IP=""
 for i in {1..10}; do
-  
-  CONTAINER_ID=$(docker compose -f docker-compose.production.yml -p shop_bazar ps -q $INACTIVE)
+    CONTAINER_ID=$(docker compose -f docker-compose.production.yml -p $APP_NAME ps -q $INACTIVE)
+    if [ -z "$CONTAINER_ID" ]; then
+        echo "❌ Could not find running container for $INACTIVE (attempt $i)"
+        sleep 5
+        continue
+    fi
 
-  if [ -z "$CONTAINER_ID" ]; then
-    echo "❌ Could not find running container for $INACTIVE (attempt $i)"
-    sleep 5
-    continue
-  fi
+    CURRENT_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CONTAINER_ID")
+    if [ -z "$CURRENT_IP" ]; then
+        echo "❌ Could not resolve IP for $INACTIVE container (attempt $i)"
+        sleep 5
+        continue
+    fi
 
-  CURRENT_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "$CONTAINER_ID")
+    STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://$CURRENT_IP:$HEALTH_PORT$HEALTH_PATH || echo "000")
 
-  if [ -z "$CURRENT_IP" ]; then
-    echo "❌ Could not resolve IP for $INACTIVE container (attempt $i)"
-    sleep 5
-    continue
-  fi
-
-  STATUS=$(curl -s -o /dev/null -w '%{http_code}' http://$CURRENT_IP:3004/health || echo "000")
-
-  if [ "$STATUS" = "200" ]; then
-    echo "✅ $INACTIVE is healthy and responding (HTTP 200)."
-    CONTAINER_IP=$CURRENT_IP   # ✅ persist here
-    break
-  else
-    echo "⏳ $INACTIVE not healthy yet (status $STATUS)... attempt $i"
-  fi
-
-  sleep 5
+    if [ "$STATUS" = "200" ]; then
+        echo "✅ $INACTIVE is healthy and responding (HTTP 200)."
+        CONTAINER_IP=$CURRENT_IP
+        break
+    else
+        echo "⏳ $INACTIVE not healthy yet (status $STATUS)... attempt $i"
+        sleep 5
+    fi
 done
 
 if [ -z "$CONTAINER_IP" ]; then
-  echo "❌ $INACTIVE failed health check after 10 attempts."
-  docker logs "$CONTAINER_ID"
-  exit 1
+    echo "❌ $INACTIVE failed health check after 10 attempts."
+    echo "📦 Last 50 lines of logs for debugging:"
+    docker logs --tail=50 "$CONTAINER_ID"
+    echo "🚨 Rolling back, keeping $ACTIVE running."
+    docker compose -f docker-compose.production.yml -p $APP_NAME stop $INACTIVE
+    docker compose -f docker-compose.production.yml -p $APP_NAME rm -f $INACTIVE
+    exit 1
 fi
 
-
-# Update NGINX to point to new port
-echo "Switching NGINX to $INACTIVE ($CONTAINER_IP)"
+# -------------------------------
+# UPDATE NGINX
+# -------------------------------
+echo "🔄 Switching NGINX to $INACTIVE ($CONTAINER_IP)"
 export ACTIVE_APP=$CONTAINER_IP
-echo "ACTIVE_APP=$ACTIVE_APP"
-
-envsubst '${ACTIVE_APP}' < ./nginx/nginx.conf > shop.conf
-sudo mv shop.conf /etc/nginx/sites-available/shop.conf
-sudo ln -sf /etc/nginx/sites-available/shop.conf /etc/nginx/sites-enabled/shop.conf
-
+envsubst '${ACTIVE_APP}' < $NGINX_TEMPLATE > shop.conf
+sudo mv shop.conf $NGINX_CONF
+sudo ln -sf $NGINX_CONF /etc/nginx/sites-enabled/shop.conf
 sudo nginx -t
 sudo systemctl reload nginx
 
-
-
-# Stop the previous app container
-echo "🛑 Stopping and removing old app $ACTIVE... "
-docker compose -f docker-compose.production.yml -p shop_bazar stop $ACTIVE
-docker compose -f docker-compose.production.yml -p shop_bazar rm -f $ACTIVE
+# -------------------------------
+# STOP & REMOVE OLD CONTAINER
+# -------------------------------
+echo "🛑 Stopping and removing old app $ACTIVE..."
+docker compose -f docker-compose.production.yml -p $APP_NAME stop $ACTIVE
+docker compose -f docker-compose.production.yml -p $APP_NAME rm -f $ACTIVE
 
 echo "✅ Blue-Green Deployment Complete. Live: $INACTIVE"
