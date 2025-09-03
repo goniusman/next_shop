@@ -12,7 +12,7 @@ RUN npm install --omit=dev --legacy-peer-deps
 # Copy source
 COPY . .
 
-# Build app
+# Build app ds 
 RUN npm run build
 
 # Run postbuild (if actually needed for NestJS — skip if it's Next.js-only)
