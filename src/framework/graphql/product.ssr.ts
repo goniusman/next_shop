@@ -70,7 +70,7 @@ export const getStaticProps: GetStaticProps<
   return addApolloState(apolloClient, {
     props: {
       product,
-      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
     },
     revalidate: 60,
   });

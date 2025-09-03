@@ -1,10 +1,10 @@
-import Accordion from '@/components/ui/accordion';
-import { faq } from '@/framework/static/faq';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
-import { GetStaticProps } from 'next';
 import { getLayout } from '@/components/layouts/layout';
 import Seo from '@/components/seo/seo';
+import Accordion from '@/components/ui/accordion';
+import { faq } from '@/framework/static/faq';
+import { GetStaticProps } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export default function HelpPage() {
   const { t } = useTranslation();
@@ -30,7 +30,7 @@ HelpPage.getLayout = getLayout;
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ['common', 'faq'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common', 'faq'])),
     },
   };
 };

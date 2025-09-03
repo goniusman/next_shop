@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps<
     return {
       props: {
         product,
-        ...(await serverSideTranslations(locale!?? 'en', ['common'])),
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
         dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
       },
       revalidate: 60,

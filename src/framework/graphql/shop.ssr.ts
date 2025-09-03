@@ -7,10 +7,10 @@ import { PRODUCTS_PER_PAGE } from './client/variables';
 import { ProductsDocument } from './gql/products.graphql';
 import { SettingsDocument } from './gql/settings.graphql';
 import {
-    ShopDocument,
-    ShopQuery,
-    ShopsDocument,
-    ShopsQuery,
+  ShopDocument,
+  ShopQuery,
+  ShopsDocument,
+  ShopsQuery,
 } from './gql/shops.graphql';
 import { getProducts } from './utils/products';
 
@@ -86,7 +86,7 @@ export const getStaticProps: GetStaticProps<
         limit: PRODUCTS_PER_PAGE,
         shop_id: Number(data?.shop?.id),
       },
-      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
     },
     revalidate: 120,
   });

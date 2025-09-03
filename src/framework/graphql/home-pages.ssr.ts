@@ -11,8 +11,7 @@ import {
   GroupsQuery,
 } from './gql/groups.graphql';
 import {
-  PopularProductsDocument,
-  ProductsDocument,
+  ProductsDocument
 } from './gql/products.graphql';
 import { SettingsDocument } from './gql/settings.graphql';
 import { getCategories } from './utils/categories';
@@ -131,7 +130,7 @@ export const getStaticProps: GetStaticProps<
       layout:
         types.find((t) => t.slug === pageType)?.settings?.layoutType ??
         'default',
-      ...(await serverSideTranslations(locale!, ['common', 'banner'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common', 'banner'])),
     },
     revalidate: 120,
   });

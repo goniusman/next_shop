@@ -51,7 +51,7 @@ export const getStaticProps: GetStaticProps<
           limit: PRODUCTS_PER_PAGE,
           manufacturer: manufacturer?.slug,
         },
-        ...(await serverSideTranslations(locale!?? 'en', ['common'])),
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
         dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
       },
       revalidate: 60,

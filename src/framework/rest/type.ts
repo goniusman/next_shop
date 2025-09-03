@@ -1,8 +1,8 @@
 import type { Type, TypeQueryOptions } from '@/types';
+import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
-import { useRouter } from 'next/router';
 
 export function useTypes(options?: Partial<TypeQueryOptions>) {
   const { locale } = useRouter();
@@ -28,7 +28,7 @@ export function useType(slug: string) {
 
   const { data, isLoading, error } = useQuery<Type, Error>(
     [API_ENDPOINTS.TYPES, { slug, language: locale }],
-    () => client.types.get({ slug, language: locale! }),
+    () => client.types.get({ slug, language: locale ?? 'en' }),
     {
       enabled: Boolean(slug),
     }

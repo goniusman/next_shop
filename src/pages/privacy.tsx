@@ -1,10 +1,10 @@
-import { privacyPolicy } from '@/framework/static/privacy';
-import { Link, Element } from 'react-scroll';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
-import { GetStaticProps } from 'next';
 import { getLayout } from '@/components/layouts/layout';
 import Seo from '@/components/seo/seo';
+import { privacyPolicy } from '@/framework/static/privacy';
+import { GetStaticProps } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { Element, Link } from 'react-scroll';
 
 function makeTitleToDOMId(title: string) {
   return title.toLowerCase().split(' ').join('_');
@@ -79,7 +79,7 @@ PrivacyPage.getLayout = getLayout;
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ['common', 'policy'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common', 'policy'])),
     },
   };
 };

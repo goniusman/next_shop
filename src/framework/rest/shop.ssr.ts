@@ -63,7 +63,7 @@ export const getStaticProps: GetStaticProps<
           shop_id: shop?._id,
           limit: PRODUCTS_PER_PAGE,
         },
-        ...(await serverSideTranslations(locale!?? 'en', ['common'])),
+        ...(await serverSideTranslations(locale ?? 'en', ['common'])),
         dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
       },
       revalidate: 60,

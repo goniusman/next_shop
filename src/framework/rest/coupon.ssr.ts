@@ -19,7 +19,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   );
   return {
     props: {
-      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
     },
   };

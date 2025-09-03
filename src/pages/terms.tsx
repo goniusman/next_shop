@@ -1,10 +1,10 @@
-import { termsAndServices } from '@/framework/static/terms';
-import { Link, Element } from 'react-scroll';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
-import { GetStaticProps } from 'next';
 import { getLayout } from '@/components/layouts/layout';
 import Seo from '@/components/seo/seo';
+import { termsAndServices } from '@/framework/static/terms';
+import { GetStaticProps } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { Element, Link } from 'react-scroll';
 
 function makeTitleToDOMId(title: string) {
   return title.toLowerCase().split(' ').join('_');
@@ -79,7 +79,7 @@ TermsPage.getLayout = getLayout;
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ['common', 'terms'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common', 'terms'])),
     },
   };
 };

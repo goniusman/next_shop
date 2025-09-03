@@ -1,9 +1,9 @@
 import type {
-  CategoryQueryOptions,
-  HomePageProps,
-  PopularProductQueryOptions,
-  SettingsQueryOptions,
-  TypeQueryOptions,
+    CategoryQueryOptions,
+    HomePageProps,
+    PopularProductQueryOptions,
+    SettingsQueryOptions,
+    TypeQueryOptions,
 } from '@/types';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -13,9 +13,9 @@ import invariant from 'tiny-invariant';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
 import {
-  CATEGORIES_PER_PAGE,
-  PRODUCTS_PER_PAGE,
-  TYPES_PER_PAGE,
+    CATEGORIES_PER_PAGE,
+    PRODUCTS_PER_PAGE,
+    TYPES_PER_PAGE,
 } from './client/variables';
 
 type ParsedQueryParams = {
@@ -127,7 +127,7 @@ export const getStaticProps: GetStaticProps<
       layout:
         types.find((t) => t.slug === pageType)?.settings.layoutType ??
         'default',
-      ...(await serverSideTranslations(locale!, ['common', 'banner'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common', 'banner'])),
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
     },
     revalidate: 120,

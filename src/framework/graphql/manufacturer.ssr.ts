@@ -87,7 +87,7 @@ export const getStaticProps: GetStaticProps<
         limit: PRODUCTS_PER_PAGE,
         manufacturer: manufacturer.toString(),
       },
-      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
+      ...(await serverSideTranslations(locale ?? 'en', ['common'])),
     },
     revalidate: 120,
   });
