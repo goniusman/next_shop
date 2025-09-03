@@ -1,33 +1,42 @@
-# Node Version
-FROM node:alpine
+# --- Base build stage ---
+FROM node:18-alpine AS builder
 
-# RUN yarn --network-timeout 100000
-
-# Set work directory
 WORKDIR /app
 
-# Copy dependencies
+# Copy deps
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --legacy-peer-deps
+# Install dependencies (with dev deps, needed for build)
+RUN npm ci --legacy-peer-deps
 
-# Copy app files
+# Copy source
 COPY . .
-
-# Postbuild app
-RUN npm run postbuild
 
 # Build app
 RUN npm run build
 
-# Expose NestJS port (adjust if needed)
-EXPOSE 3004
+# Run postbuild (if actually needed for NestJS — skip if it's Next.js-only)
+RUN npm run postbuild || echo "No postbuild step"
+
+
+# --- Production runtime stage ---
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Copy only production deps
+COPY package*.json ./
+RUN npm ci --omit=dev --legacy-peer-deps
+
+# Copy build output
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/public ./public
+
+# Expose NestJS port (sync with .env)
+EXPOSE 3003
 
 # Start app
 CMD ["npm", "run", "start"]
-
-
 
 
 
