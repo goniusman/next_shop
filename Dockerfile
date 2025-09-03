@@ -29,9 +29,9 @@ WORKDIR /app
 # RUN npm install --omit=dev --legacy-peer-deps
 
 # Copy build output
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
 COPY package*.json ./
 
 # Expose NestJS port (sync with .env)
