@@ -52,6 +52,7 @@ fi
 echo "Switching NGINX to $INACTIVE ($CONTAINER_IP)"
 export ACTIVE_APP=$CONTAINER_IP
 echo "ACTIVE_APP=$ACTIVE_APP"
+chmod 644 ./nginx/nginx.template.conf
 
 envsubst '${ACTIVE_APP}' < ./nginx/nginx.template.conf > template.conf
 sudo mv template.conf /etc/nginx/sites-available/shop.conf
