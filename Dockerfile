@@ -1,4 +1,4 @@
-# --- Base build stage ---
+# --- Build stage ---
 FROM node:18-alpine AS builder
 
 WORKDIR /app
@@ -6,51 +6,30 @@ WORKDIR /app
 # Copy deps
 COPY package*.json ./
 
-# Install dependencies (with dev deps, needed for build)
+# Install all dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy source
+# Copy source including config files
 COPY . .
 
-# Build app ds 
+# Build Next.js
 RUN npm run build
 
-# Run postbuild (if actually needed for NestJS — skip if it's Next.js-only)
+# Postbuild if needed
 RUN npm run postbuild || echo "No postbuild step"
 
-
-# --- Production runtime stage ---
+# --- Production stage ---
 FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# # Copy only production deps
-# COPY package*.json ./
-# RUN npm install --omit=dev --legacy-peer-deps
-
-# Copy build output
+# Copy only what is needed
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/node_modules ./node_modules
-COPY package*.json ./
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/next-i18next.config.js ./next-i18next.config.js
 
-# Expose NestJS port (sync with .env)
 EXPOSE 3003
 
-# Start app
 CMD ["npm", "run", "start"]
-
-
-
-# FROM node:16.14.0
-# # RUN apk add --no-cache nodejs npm yarn
-# WORKDIR /app
-# COPY  package.json yarn.lock ./
-# RUN yarn --network-timeout 1000000
-# COPY ./ ./
-# EXPOSE 3003
-# CMD ["yarn", "dev:rest"]
-
-
-
-

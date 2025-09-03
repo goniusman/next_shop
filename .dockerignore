@@ -8,6 +8,5 @@ npm-debug.log
 README.md 
 docker-compose*
 another.js
-dist 
-.next
+dist
 .husky
