@@ -5,10 +5,10 @@ import invariant from 'tiny-invariant';
 import { addApolloState, initializeApollo } from './client';
 import { PRODUCTS_PER_PAGE } from './client/variables';
 import {
-  ManufacturerDocument,
-  ManufacturerQuery,
-  ManufacturersDocument,
-  ManufacturersQuery,
+    ManufacturerDocument,
+    ManufacturerQuery,
+    ManufacturersDocument,
+    ManufacturersQuery,
 } from './gql/manufacturers.graphql';
 import { ProductsDocument } from './gql/products.graphql';
 import { SettingsDocument } from './gql/settings.graphql';
@@ -87,7 +87,7 @@ export const getStaticProps: GetStaticProps<
         limit: PRODUCTS_PER_PAGE,
         manufacturer: manufacturer.toString(),
       },
-      ...(await serverSideTranslations(locale!, ['common'])),
+      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
     },
     revalidate: 120,
   });

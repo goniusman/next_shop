@@ -1,9 +1,7 @@
-import type { ShopQueryOptions, TypeQueryOptions } from '@/types';
 import type { GetStaticProps } from 'next';
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { addApolloState, initializeApollo } from './client';
-import { SHOPS_PER_PAGE, TYPES_PER_PAGE } from './client/variables';
 import { GroupsDocument } from './gql/groups.graphql';
 import { SettingsDocument } from './gql/settings.graphql';
 import { ShopsDocument } from './gql/shops.graphql';
@@ -29,7 +27,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   });
   return addApolloState(apolloClient, {
     props: {
-      ...(await serverSideTranslations(locale!, ['common'])),
+      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
     },
   });
 };

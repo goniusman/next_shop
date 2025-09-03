@@ -19,7 +19,7 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   });
   return addApolloState(apolloClient, {
     props: {
-      ...(await serverSideTranslations(locale!, ['common'])),
+      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
     },
   });
 };

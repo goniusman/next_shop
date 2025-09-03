@@ -1,10 +1,10 @@
+import { getCategories } from "@/framework/utils/categories";
 import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import invariant from 'tiny-invariant';
 import { addApolloState, initializeApollo } from './client';
 import { CategoriesDocument } from './gql/categories.graphql';
 import { SettingsDocument } from './gql/settings.graphql';
-import { getCategories } from "@/framework/utils/categories";
 export const getServerSideProps: GetServerSideProps = async ({
   locale,
   params,
@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   });
   return addApolloState(apolloClient, {
     props: {
-      ...(await serverSideTranslations(locale!, ['common'])),
+      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
     },
   });
 };

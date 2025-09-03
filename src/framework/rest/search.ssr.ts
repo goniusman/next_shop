@@ -1,16 +1,16 @@
+import client from '@/framework/client';
+import { API_ENDPOINTS } from '@/framework/client/api-endpoints';
+import { TYPES_PER_PAGE } from '@/framework/client/variables';
+import {
+    CategoryQueryOptions,
+    SettingsQueryOptions,
+    TypeQueryOptions,
+} from '@/types';
 import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import invariant from 'tiny-invariant';
 import { QueryClient } from 'react-query';
-import { API_ENDPOINTS } from '@/framework/client/api-endpoints';
 import { dehydrate } from 'react-query/hydration';
-import client from '@/framework/client';
-import {
-  CategoryQueryOptions,
-  SettingsQueryOptions,
-  TypeQueryOptions,
-} from '@/types';
-import { TYPES_PER_PAGE } from '@/framework/client/variables';
+import invariant from 'tiny-invariant';
 
 export const getServerSideProps: GetServerSideProps = async ({
   locale,
@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ['common'])),
+      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
     },
   };

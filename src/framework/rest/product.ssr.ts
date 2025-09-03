@@ -1,12 +1,12 @@
+import { API_ENDPOINTS } from '@/framework/client/api-endpoints';
 import type { Product } from '@/types';
+import { SettingsQueryOptions } from '@/types';
 import type { GetStaticPaths, GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { QueryClient } from 'react-query';
+import { dehydrate } from 'react-query/hydration';
 import invariant from 'tiny-invariant';
 import client from './client';
-import { dehydrate } from 'react-query/hydration';
-import { API_ENDPOINTS } from '@/framework/client/api-endpoints';
-import { QueryClient } from 'react-query';
-import { SettingsQueryOptions } from '@/types';
 
 // This function gets called at build time
 type ParsedQueryParams = {
@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps<
     return {
       props: {
         product,
-        ...(await serverSideTranslations(locale!, ['common'])),
+        ...(await serverSideTranslations(locale!?? 'en', ['common'])),
         dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
       },
       revalidate: 60,

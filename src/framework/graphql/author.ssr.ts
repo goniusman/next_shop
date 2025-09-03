@@ -87,7 +87,7 @@ export const getStaticProps: GetStaticProps<
         limit: PRODUCTS_PER_PAGE,
         author,
       },
-      ...(await serverSideTranslations(locale!, ['common'])),
+      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
     },
     revalidate: 60,
   });

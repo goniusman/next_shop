@@ -4,10 +4,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import invariant from 'tiny-invariant';
 import { addApolloState, initializeApollo } from './client';
 import {
-  ProductDocument,
-  ProductQuery,
-  ProductsDocument,
-  ProductsQuery,
+    ProductDocument,
+    ProductQuery,
+    ProductsDocument,
+    ProductsQuery,
 } from './gql/products.graphql';
 import { SettingsDocument } from './gql/settings.graphql';
 
@@ -70,7 +70,7 @@ export const getStaticProps: GetStaticProps<
   return addApolloState(apolloClient, {
     props: {
       product,
-      ...(await serverSideTranslations(locale!, ['common'])),
+      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
     },
     revalidate: 60,
   });

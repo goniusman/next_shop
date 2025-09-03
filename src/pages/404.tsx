@@ -1,10 +1,10 @@
-import type { GetStaticProps } from 'next';
+import noResult from '@/assets/no-result.svg';
 import { Image } from '@/components/ui/image';
 import Link from '@/components/ui/link';
 import { Routes } from '@/config/routes';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import type { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
-import noResult from '@/assets/no-result.svg';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export default function NotFoundPage() {
   const { t } = useTranslation('common');
@@ -35,7 +35,7 @@ export default function NotFoundPage() {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ['common'])),
+      ...(await serverSideTranslations(locale!?? 'en', ['common'])),
     },
   };
 };
