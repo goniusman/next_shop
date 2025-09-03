@@ -26,7 +26,7 @@ WORKDIR /app
 
 # Copy only production deps
 COPY package*.json ./
-RUN npm ci --omit=dev --legacy-peer-deps
+RUN npm install --omit=dev --legacy-peer-deps
 
 # Copy build output
 COPY --from=builder /app/dist ./dist
