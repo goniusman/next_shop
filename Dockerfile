@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies (with dev deps, needed for build)
-RUN npm install --omit=dev --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # Copy source
 COPY . .
@@ -24,13 +24,15 @@ FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-# Copy only production deps
-COPY package*.json ./
-RUN npm install --omit=dev --legacy-peer-deps
+# # Copy only production deps
+# COPY package*.json ./
+# RUN npm install --omit=dev --legacy-peer-deps
 
 # Copy build output
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
+COPY package*.json ./
 
 # Expose NestJS port (sync with .env)
 EXPOSE 3003
