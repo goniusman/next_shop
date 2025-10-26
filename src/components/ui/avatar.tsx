@@ -1,5 +1,5 @@
-import cn from 'classnames';
 import { Image } from '@/components/ui/image';
+import cn from 'classnames';
 
 type AvatarProps = {
   className?: string;
@@ -18,6 +18,8 @@ const Avatar: React.FC<AvatarProps> = ({ src, className, title, ...rest }) => {
       {...rest}
     >
       <Image alt={title} src={src} layout="fill" priority={true} />
+
+      {/* <img src={file.preview} alt={file?.name} /> */}
     </div>
   );
 };

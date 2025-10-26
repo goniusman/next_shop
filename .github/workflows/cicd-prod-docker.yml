@@ -44,7 +44,7 @@ jobs:
         run: |
           docker images --format "{{.Repository}}:{{.Tag}} {{.CreatedAt}}" \
             | grep "^shop_bazar:production-" \
-            | sort -k2 -r | tail -n +4 | awk '{print $1}' | xargs -r docker rmi
+            | sort -k2 -r | tail -n +3 | awk '{print $1}' | xargs -r docker rmi
 
       - name: Prune stopped containers /// do not run this
         run: docker container prune -f
